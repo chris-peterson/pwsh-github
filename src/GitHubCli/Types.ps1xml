@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Types>
+  <Type>
+    <Name>GitHub.Issue</Name>
+    <Members>
+      <ScriptProperty>
+        <Name>AuthorName</Name>
+        <GetScriptBlock>$this.User.Login</GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
+        <Name>AssigneeName</Name>
+        <GetScriptBlock>$this.Assignee.Login</GetScriptBlock>
+      </ScriptProperty>
+    </Members>
+  </Type>
+  <Type>
+    <Name>GitHub.PullRequest</Name>
+    <Members>
+      <ScriptProperty>
+        <Name>AuthorName</Name>
+        <GetScriptBlock>$this.User.Login</GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
+        <Name>AssigneeName</Name>
+        <GetScriptBlock>$this.Assignee.Login</GetScriptBlock>
+      </ScriptProperty>
+    </Members>
+  </Type>
+  <Type>
+    <Name>GitHub.Repository</Name>
+    <Members>
+      <ScriptProperty>
+        <Name>OwnerName</Name>
+        <GetScriptBlock>$this.Owner.Login</GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
+        <Name>LastActivityAt</Name>
+        <GetScriptBlock>$this.PushedAt</GetScriptBlock>
+      </ScriptProperty>
+    </Members>
+  </Type>
+</Types>
