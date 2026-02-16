@@ -31,7 +31,7 @@ function Get-GitHubConfiguration {
         }
     }
     catch {
-        # gh CLI not available or not authenticated
+        Write-Verbose "gh CLI not available or not authenticated: $_"
     }
 
     throw @"

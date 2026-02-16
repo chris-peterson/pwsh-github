@@ -54,7 +54,7 @@ function New-GitHubObject {
                     if ($Value -is [string] -and $Value -match '^\d{4}-\d{2}-\d{2}T') {
                         try {
                             $Value = [datetime]::Parse($Value)
-                        } catch {}
+                        } catch { Write-Debug "Failed to parse datetime: $Value" }
                     }
 
                     $Wrapper | Add-Member -MemberType NoteProperty -Name $Name -Value $Value
