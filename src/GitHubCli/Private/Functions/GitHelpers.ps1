@@ -1,4 +1,4 @@
-function Get-LocalGitContext {
+function Get-GitHubRemoteContext {
     [CmdletBinding()]
     [OutputType([PSCustomObject])]
     param (
@@ -76,6 +76,7 @@ function Get-LocalGitContext {
 
 function Resolve-GitHubRepository {
     [CmdletBinding()]
+    [OutputType([string])]
     param (
         [Parameter(Position=0)]
         [string]
@@ -83,7 +84,7 @@ function Resolve-GitHubRepository {
     )
 
     if ($Repository -eq '.') {
-        $Context = Get-LocalGitContext
+        $Context = Get-GitHubRemoteContext
         if (-not $Context.Owner -or -not $Context.Repo) {
             throw "Could not infer GitHub repository based on current directory ($(Get-Location))"
         }
