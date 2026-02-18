@@ -1,6 +1,6 @@
 BeforeAll {
-    . $PSScriptRoot/../src/GitHubCli/Private/Globals.ps1
-    . $PSScriptRoot/../src/GitHubCli/Private/Functions/PaginationHelpers.ps1
+    . $PSScriptRoot/../src/GithubCli/Private/Globals.ps1
+    . $PSScriptRoot/../src/GithubCli/Private/Functions/PaginationHelpers.ps1
 }
 
 Describe "Resolve-GithubMaxPages" {
