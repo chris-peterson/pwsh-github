@@ -1,7 +1,7 @@
 BeforeAll {
-    . $PSScriptRoot/../src/GithubCli/Private/Functions/StringHelpers.ps1
-    . $PSScriptRoot/../src/GithubCli/Private/Globals.ps1
-    . $PSScriptRoot/../src/GithubCli/Private/Functions/ObjectHelpers.ps1
+    . $PSScriptRoot/../src/GitHubCli/Private/Functions/StringHelpers.ps1
+    . $PSScriptRoot/../src/GitHubCli/Private/Globals.ps1
+    . $PSScriptRoot/../src/GitHubCli/Private/Functions/ObjectHelpers.ps1
 }
 
 Describe "New-GithubObject" {
