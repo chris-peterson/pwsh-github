@@ -1,6 +1,6 @@
-function Get-GitHubRepository {
+function Get-GithubRepository {
     [CmdletBinding(DefaultParameterSetName='ByName')]
-    [OutputType('GitHub.Repository')]
+    [OutputType('Github.Repository')]
     param(
         [Parameter(Position=0, ParameterSetName='ByName')]
         [string]
@@ -39,7 +39,7 @@ function Get-GitHubRepository {
         $All
     )
 
-    $MaxPages = Resolve-GitHubMaxPages -MaxPages:$MaxPages -All:$All
+    $MaxPages = Resolve-GithubMaxPages -MaxPages:$MaxPages -All:$All
 
     $Query = @{}
     if ($Type) {
@@ -48,29 +48,29 @@ function Get-GitHubRepository {
 
     switch ($PSCmdlet.ParameterSetName) {
         'ByName' {
-            $Repo = Resolve-GitHubRepository $Repository
+            $Repo = Resolve-GithubRepository $Repository
             # https://docs.github.com/en/rest/repos/repos#get-a-repository
-            $Result = Invoke-GitHubApi GET "repos/$Repo"
+            $Result = Invoke-GithubApi GET "repos/$Repo"
             return $Result |
-                New-GitHubObject 'GitHub.Repository' |
+                New-GithubObject 'Github.Repository' |
                 Get-FilteredObject $Select
         }
         'ByOrg' {
             # https://docs.github.com/en/rest/repos/repos#list-organization-repositories
-            $Result = Invoke-GitHubApi GET "orgs/$Organization/repos" $Query -MaxPages $MaxPages
+            $Result = Invoke-GithubApi GET "orgs/$Organization/repos" $Query -MaxPages $MaxPages
         }
         'ByUser' {
             # https://docs.github.com/en/rest/repos/repos#list-repositories-for-a-user
-            $Result = Invoke-GitHubApi GET "users/$Username/repos" $Query -MaxPages $MaxPages
+            $Result = Invoke-GithubApi GET "users/$Username/repos" $Query -MaxPages $MaxPages
         }
         'Mine' {
             # https://docs.github.com/en/rest/repos/repos#list-repositories-for-the-authenticated-user
-            $Result = Invoke-GitHubApi GET "user/repos" $Query -MaxPages $MaxPages
+            $Result = Invoke-GithubApi GET "user/repos" $Query -MaxPages $MaxPages
         }
     }
 
     $Result |
-        New-GitHubObject 'GitHub.Repository' |
+        New-GithubObject 'Github.Repository' |
         Sort-Object FullName |
         Get-FilteredObject $Select
 }

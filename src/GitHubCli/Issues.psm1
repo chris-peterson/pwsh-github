@@ -1,8 +1,9 @@
-function Get-GitHubIssue {
+function Get-GithubIssue {
     [CmdletBinding(DefaultParameterSetName='ByRepo')]
-    [OutputType('GitHub.Issue')]
+    [OutputType('Github.Issue')]
     param(
-        [Parameter(ParameterSetName='ByRepo')]
+        [Parameter(ParameterSetName='ByRepo', ValueFromPipelineByPropertyName)]
+        [Alias('RepositoryId')]
         [string]
         $Repository = '.',
 
@@ -60,7 +61,7 @@ function Get-GitHubIssue {
         $All
     )
 
-    $MaxPages = Resolve-GitHubMaxPages -MaxPages:$MaxPages -All:$All
+    $MaxPages = Resolve-GithubMaxPages -MaxPages:$MaxPages -All:$All
 
     $Query = @{}
     if ($State)     { $Query.state     = $State }
@@ -73,27 +74,27 @@ function Get-GitHubIssue {
 
     switch ($PSCmdlet.ParameterSetName) {
         'ByRepo' {
-            $Repo = Resolve-GitHubRepository $Repository
+            $Repo = Resolve-GithubRepository $Repository
             if ($IssueNumber) {
                 # https://docs.github.com/en/rest/issues/issues#get-an-issue
-                return Invoke-GitHubApi GET "repos/$Repo/issues/$IssueNumber" |
-                    New-GitHubObject 'GitHub.Issue'
+                return Invoke-GithubApi GET "repos/$Repo/issues/$IssueNumber" |
+                    New-GithubObject 'Github.Issue'
             }
             # https://docs.github.com/en/rest/issues/issues#list-repository-issues
-            $Result = Invoke-GitHubApi GET "repos/$Repo/issues" $Query -MaxPages $MaxPages
+            $Result = Invoke-GithubApi GET "repos/$Repo/issues" $Query -MaxPages $MaxPages
         }
         'ByOrg' {
             # https://docs.github.com/en/rest/issues/issues#list-organization-issues-assigned-to-the-authenticated-user
-            $Result = Invoke-GitHubApi GET "orgs/$Organization/issues" $Query -MaxPages $MaxPages
+            $Result = Invoke-GithubApi GET "orgs/$Organization/issues" $Query -MaxPages $MaxPages
         }
         'Mine' {
             # https://docs.github.com/en/rest/issues/issues#list-issues-assigned-to-the-authenticated-user
-            $Result = Invoke-GitHubApi GET "issues" $Query -MaxPages $MaxPages
+            $Result = Invoke-GithubApi GET "issues" $Query -MaxPages $MaxPages
         }
     }
 
-    # GitHub's issues endpoint returns pull requests too; filter them out
+    # Github's issues endpoint returns pull requests too; filter them out
     $Result |
         Where-Object { -not $_.pull_request } |
-        New-GitHubObject 'GitHub.Issue'
+        New-GithubObject 'Github.Issue'
 }

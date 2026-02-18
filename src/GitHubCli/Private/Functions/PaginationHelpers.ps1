@@ -1,4 +1,4 @@
-function Resolve-GitHubMaxPages {
+function Resolve-GithubMaxPages {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', '', Justification = 'Resolves the MaxPages parameter value')]
     param (
         [Parameter()]
@@ -10,10 +10,10 @@ function Resolve-GitHubMaxPages {
         $All
     )
     if ($MaxPages -eq 0) {
-        $MaxPages = $global:GitHubDefaultMaxPages
+        $MaxPages = $global:GithubDefaultMaxPages
     }
     if ($All) {
-        if ($MaxPages -ne $global:GitHubDefaultMaxPages) {
+        if ($MaxPages -ne $global:GithubDefaultMaxPages) {
             Write-Warning -Message "Ignoring -MaxPages in favor of -All"
         }
         $MaxPages = [uint]::MaxValue

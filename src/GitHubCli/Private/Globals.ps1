@@ -2,17 +2,20 @@ if($PSVersionTable.Platform -like 'Win*') {
     $env:HOME = Join-Path $env:HOMEDRIVE $env:HOMEPATH
 }
 
-$global:GitHubConfigurationPath = Join-Path $env:HOME "/.config/powershell/githubcli/config.yml"
-$global:GitHubBaseUrl              = 'https://api.github.com'
-$global:GitHubDefaultMaxPages      = 10
+$global:GithubConfigurationPath = Join-Path $env:HOME "/.config/powershell/githubcli/config.yml"
+$global:GithubBaseUrl              = 'https://api.github.com'
+$global:GithubDefaultMaxPages      = 10
 
-$global:GitHubIdentityPropertyNameExemptions = @{
-    'GitHub.Issue'              = 'Number'
-    'GitHub.PullRequest'        = 'Number'
-    'GitHub.Repository'         = 'Id'
-    'GitHub.User'               = 'Id'
-    'GitHub.Label'              = 'Id'
-    'GitHub.Milestone'          = 'Number'
-    'GitHub.Comment'            = 'Id'
-    'GitHub.Configuration'      = ''
+$global:GithubIdentityPropertyNameExemptions = @{
+    'Github.Branch'             = ''
+    'Github.Comment'            = 'Id'
+    'Github.Configuration'      = ''
+    'Github.Issue'              = 'Number'
+    'Github.Label'              = 'Id'
+    'Github.Milestone'          = 'Number'
+    'Github.Organization'       = 'Id'
+    'Github.PullRequest'        = 'Number'
+    'Github.Release'            = 'Id'
+    'Github.Repository'         = 'Id'
+    'Github.User'               = 'Id'
 }

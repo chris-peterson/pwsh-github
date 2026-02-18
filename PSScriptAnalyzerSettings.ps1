@@ -6,7 +6,7 @@
         # This module intentionally uses global variables for shared module state
         # (config path, API defaults, identity mappings, etc.). $script: scope doesn't
         # work across module files, so $global: is the standard pattern.
-        # All globals are namespaced with 'GitHub' prefix to avoid collisions.
+        # All globals are namespaced with 'Github' prefix to avoid collisions.
         'PSAvoidGlobalVars'
 
         # Suggests putting $null on the left side of comparisons to avoid array coercion issues.

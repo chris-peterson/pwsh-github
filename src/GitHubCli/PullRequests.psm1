@@ -1,8 +1,9 @@
-function Get-GitHubPullRequest {
+function Get-GithubPullRequest {
     [CmdletBinding(DefaultParameterSetName='ByRepo')]
-    [OutputType('GitHub.PullRequest')]
+    [OutputType('Github.PullRequest')]
     param(
-        [Parameter(ParameterSetName='ByRepo')]
+        [Parameter(ParameterSetName='ByRepo', ValueFromPipelineByPropertyName)]
+        [Alias('RepositoryId')]
         [string]
         $Repository = '.',
 
@@ -48,7 +49,7 @@ function Get-GitHubPullRequest {
         $All
     )
 
-    $MaxPages = Resolve-GitHubMaxPages -MaxPages:$MaxPages -All:$All
+    $MaxPages = Resolve-GithubMaxPages -MaxPages:$MaxPages -All:$All
 
     $Query = @{}
     if ($State)     { $Query.state     = $State }
@@ -59,27 +60,27 @@ function Get-GitHubPullRequest {
 
     switch ($PSCmdlet.ParameterSetName) {
         'ByRepo' {
-            $Repo = Resolve-GitHubRepository $Repository
+            $Repo = Resolve-GithubRepository $Repository
             if ($PullRequestNumber) {
                 # https://docs.github.com/en/rest/pulls/pulls#get-a-pull-request
-                return Invoke-GitHubApi GET "repos/$Repo/pulls/$PullRequestNumber" |
-                    New-GitHubObject 'GitHub.PullRequest'
+                return Invoke-GithubApi GET "repos/$Repo/pulls/$PullRequestNumber" |
+                    New-GithubObject 'Github.PullRequest'
             }
             # https://docs.github.com/en/rest/pulls/pulls#list-pull-requests
-            $Result = Invoke-GitHubApi GET "repos/$Repo/pulls" $Query -MaxPages $MaxPages
+            $Result = Invoke-GithubApi GET "repos/$Repo/pulls" $Query -MaxPages $MaxPages
         }
         'Mine' {
             # Use search API to find PRs authored by current user
-            $User = Invoke-GitHubApi GET "user"
+            $User = Invoke-GithubApi GET "user"
             $SearchQuery = "is:pr author:$($User.login)"
             if ($State -ne 'all') {
                 $SearchQuery += " is:$State"
             }
-            $Result = Invoke-GitHubApi GET "search/issues" @{ q = $SearchQuery } -MaxPages $MaxPages |
+            $Result = Invoke-GithubApi GET "search/issues" @{ q = $SearchQuery } -MaxPages $MaxPages |
                 Select-Object -ExpandProperty items
         }
     }
 
     $Result |
-        New-GitHubObject 'GitHub.PullRequest'
+        New-GithubObject 'Github.PullRequest'
 }

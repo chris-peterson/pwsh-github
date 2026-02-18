@@ -1,4 +1,4 @@
-function Invoke-GitHubApi {
+function Invoke-GithubApi {
     [CmdletBinding()]
     [OutputType([PSCustomObject])]
     param(
@@ -32,13 +32,13 @@ function Invoke-GitHubApi {
          $MaxPages = [int]::MaxValue
     }
 
-    $Config = Get-GitHubConfiguration
+    $Config = Get-GithubConfiguration
     $BaseUrl = $Config.BaseUrl.TrimEnd('/')
 
     $Headers = @{
         Accept                 = $Accept
         Authorization          = "Bearer $($Config.AccessToken)"
-        'X-GitHub-Api-Version' = '2022-11-28'
+        'X-Github-Api-Version' = '2022-11-28'
     }
 
     $SerializedQuery = ''

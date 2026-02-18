@@ -1,6 +1,6 @@
 # pwsh-github
 
-PowerShell module for GitHub automation.
+PowerShell module for Github automation.
 
 ## Status
 
@@ -17,7 +17,7 @@ PowerShell module for GitHub automation.
 ```powershell
 # Clone and import locally
 git clone https://github.com/chris-peterson/pwsh-github.git
-Import-Module ./pwsh-github/src/GitHubCli/GitHubCli.psd1
+Import-Module ./pwsh-github/src/GithubCli/GithubCli.psd1
 ```
 
 ### Authentication
@@ -25,117 +25,117 @@ Import-Module ./pwsh-github/src/GitHubCli/GitHubCli.psd1
 The module checks for credentials in this order:
 
 1. **Environment variables** -- `GITHUB_TOKEN` or `GH_TOKEN`
-2. **GitHub CLI** -- `gh auth token` (if `gh` is installed and authenticated)
+2. **Github CLI** -- `gh auth token` (if `gh` is installed and authenticated)
 3. **Config file** -- `~/.config/powershell/githubcli/config.yml`
 
 ```powershell
 # Option 1: Environment variable
 $env:GITHUB_TOKEN = 'ghp_...'
 
-# Option 2: GitHub CLI (recommended for interactive use)
+# Option 2: Github CLI (recommended for interactive use)
 gh auth login
 
 # Then import the module
-Import-Module ./src/GitHubCli/GitHubCli.psd1
+Import-Module ./src/GithubCli/GithubCli.psd1
 ```
 
 ## Usage
 
 ### Context Awareness
 
-Commands are context-aware.  When run inside a GitHub repository, `.` resolves to the current repo:
+Commands are context-aware.  When run inside a Github repository, `.` resolves to the current repo:
 
 ```powershell
 cd ~/src/my-github-repo
-Get-GitHubIssue           # lists issues for the current repo
-Get-GitHubPullRequest     # lists PRs for the current repo
-Get-GitHubRepository      # gets info about the current repo
+Get-GithubIssue           # lists issues for the current repo
+Get-GithubPullRequest     # lists PRs for the current repo
+Get-GithubRepository      # gets info about the current repo
 ```
 
 ### Repositories
 
 ```powershell
 # Current repository
-Get-GitHubRepository
+Get-GithubRepository
 
 # By owner/name
-Get-GitHubRepository 'chris-peterson/pwsh-github'
+Get-GithubRepository 'chris-peterson/pwsh-github'
 
 # List org repos
-Get-GitHubRepository -Organization 'my-org'
+Get-GithubRepository -Organization 'my-org'
 
 # List your repos
-Get-GitHubRepository -Mine
+Get-GithubRepository -Mine
 ```
 
 ### Issues
 
 ```powershell
 # List open issues for current repo
-Get-GitHubIssue
+Get-GithubIssue
 
 # Get a specific issue
-Get-GitHubIssue 42
+Get-GithubIssue 42
 
 # List closed issues
-Get-GitHubIssue -State closed
+Get-GithubIssue -State closed
 
 # Filter by assignee
-Get-GitHubIssue -Assignee 'octocat'
+Get-GithubIssue -Assignee 'octocat'
 
 # Filter by labels
-Get-GitHubIssue -Labels 'bug,help wanted'
+Get-GithubIssue -Labels 'bug,help wanted'
 
 # Your issues across all repos
-Get-GitHubIssue -Mine
+Get-GithubIssue -Mine
 ```
 
 ### Pull Requests
 
 ```powershell
 # List open PRs for current repo
-Get-GitHubPullRequest
+Get-GithubPullRequest
 
 # Get a specific PR
-Get-GitHubPullRequest 123
+Get-GithubPullRequest 123
 
 # List all PRs (including closed)
-Get-GitHubPullRequest -State all
+Get-GithubPullRequest -State all
 
 # Filter by branch
-Get-GitHubPullRequest -Head 'feature-branch'
+Get-GithubPullRequest -Head 'feature-branch'
 
 # Your PRs
-Get-GitHubPullRequest -Mine
+Get-GithubPullRequest -Mine
 
 # Reviews for a PR
-Get-GitHubPullRequestReview 123
+Get-GithubPullRequestReview 123
 ```
 
 ### Direct API Access
 
 ```powershell
-# Call any GitHub API endpoint directly
-Invoke-GitHubApi GET 'repos/chris-peterson/pwsh-github/contributors'
+# Call any Github API endpoint directly
+Invoke-GithubApi GET 'repos/chris-peterson/pwsh-github/contributors'
 ```
 
 ## Forge Ecosystem
 
-`GitHubCli` is part of the **pwsh-forge** ecosystem — a unified PowerShell interface across software forges.
-`GitHubCli` works standalone, but also integrates with [ForgeCli](https://github.com/chris-peterson/pwsh-forge)
+`GithubCli` is part of the **pwsh-forge** ecosystem — a unified PowerShell interface across software forges.
+`GithubCli` works standalone, but also integrates with [ForgeCli](https://github.com/chris-peterson/pwsh-forge)
 so that commands like `Get-Issue` are automatically handled by the correct provider.
 
 ```powershell
-Import-Module GitHubCli
+Import-Module GithubCli
 Import-Module ForgeCli
 
 cd ~/src/my-github-project
-Get-Issue              # routes to Get-GitHubIssue
-Get-ChangeRequest       # routes to Get-GitHubPullRequest
+Get-Issue              # routes to Get-GithubIssue
+Get-ChangeRequest       # routes to Get-GithubPullRequest
 ```
 
 | Module | Purpose |
 |--------|---------|
 | [pwsh-forge](https://github.com/chris-peterson/pwsh-forge) | Unified dispatch layer |
-| **pwsh-github** | GitHub provider (this module) |
+| **pwsh-github** | Github provider (this module) |
 | [pwsh-gitlab](https://github.com/chris-peterson/pwsh-gitlab) | GitLab provider |

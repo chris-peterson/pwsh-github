@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Types>
   <Type>
-    <Name>GitHub.Issue</Name>
+    <Name>Github.Branch</Name>
+    <Members>
+      <ScriptProperty>
+        <Name>ShortHash</Name>
+        <GetScriptBlock>if ($this.Commit.Sha) { $this.Commit.Sha.Substring(0, 8) }</GetScriptBlock>
+      </ScriptProperty>
+    </Members>
+  </Type>
+  <Type>
+    <Name>Github.Issue</Name>
     <Members>
       <ScriptProperty>
         <Name>AuthorName</Name>
@@ -14,7 +23,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>GitHub.PullRequest</Name>
+    <Name>Github.PullRequest</Name>
     <Members>
       <ScriptProperty>
         <Name>AuthorName</Name>
@@ -27,7 +36,16 @@
     </Members>
   </Type>
   <Type>
-    <Name>GitHub.Repository</Name>
+    <Name>Github.Release</Name>
+    <Members>
+      <ScriptProperty>
+        <Name>AuthorName</Name>
+        <GetScriptBlock>$this.Author.Login</GetScriptBlock>
+      </ScriptProperty>
+    </Members>
+  </Type>
+  <Type>
+    <Name>Github.Repository</Name>
     <Members>
       <ScriptProperty>
         <Name>OwnerName</Name>

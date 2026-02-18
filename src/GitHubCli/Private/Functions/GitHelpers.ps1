@@ -1,4 +1,4 @@
-function Get-GitHubRemoteContext {
+function Get-GithubRemoteContext {
     [CmdletBinding()]
     [OutputType([PSCustomObject])]
     param (
@@ -37,7 +37,7 @@ function Get-GitHubRemoteContext {
                 $Context.Repo = $Matches.Repo
             }
             else {
-                # Non-GitHub remote -- still extract owner/repo for general use
+                # Non-Github remote -- still extract owner/repo for general use
                 try {
                     $Uri = [Uri]::new($OriginUrl)
                     $Parts = $Uri.AbsolutePath.Trim('/').TrimEnd('.git') -split '/'
@@ -74,7 +74,7 @@ function Get-GitHubRemoteContext {
     $Context
 }
 
-function Resolve-GitHubRepository {
+function Resolve-GithubRepository {
     [CmdletBinding()]
     [OutputType([string])]
     param (
@@ -84,17 +84,21 @@ function Resolve-GitHubRepository {
     )
 
     if ($Repository -eq '.') {
-        $Context = Get-GitHubRemoteContext
+        $Context = Get-GithubRemoteContext
         if (-not $Context.Owner -or -not $Context.Repo) {
-            throw "Could not infer GitHub repository based on current directory ($(Get-Location))"
+            throw "Could not infer Github repository based on current directory ($(Get-Location))"
         }
         return "$($Context.Owner)/$($Context.Repo)"
     }
 
-    # If already in owner/repo format, return as-is
     if ($Repository -match '^[^/]+/[^/]+$') {
         return $Repository
     }
 
-    throw "Invalid repository format '$Repository'. Expected 'owner/repo' or '.' for current directory."
+    if ($Repository -match '^\d+$') {
+        $Repo = Invoke-GithubApi GET "repositories/$Repository"
+        return $Repo.full_name
+    }
+
+    throw "Invalid repository format '$Repository'. Expected 'owner/repo', numeric ID, or '.' for current directory."
 }

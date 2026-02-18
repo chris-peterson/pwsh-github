@@ -154,7 +154,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: PowerShell Gallery
-      url: https://www.powershellgallery.com/packages/GitHubCli
+      url: https://www.powershellgallery.com/packages/GithubCli
 
     steps:
       - uses: actions/checkout@v6

@@ -1,12 +1,12 @@
 @{
-    ModuleVersion = '0.1.0'
+    ModuleVersion = '0.2.0'
 
     PrivateData = @{
         PSData = @{
             LicenseUri = 'https://github.com/chris-peterson/pwsh-github/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-github'
             Tags = @(
-                'GitHub',
+                'Github',
                 'API',
                 'REST',
                 'DevOps',
@@ -20,7 +20,17 @@
             )
             ReleaseNotes =
 @'
-* Initial framing of readonly operations for issues, repositories, and pull requests
+Readonly support for
+* Branches
+* Releases
+* Repositories
+* Users
+* Organizations
+* Pull Requests
+* Issues
+* Comments
+* Labels
+* Milestones
 '@
         }
     }
@@ -31,7 +41,7 @@
     CompanyName = 'Chris Peterson'
     Copyright = '(c) 2026'
 
-    Description = 'Interact with GitHub via PowerShell'
+    Description = 'Interact with Github via PowerShell'
     PowerShellVersion = '7.1'
     CompatiblePSEditions = @('Core')
 
@@ -48,26 +58,42 @@
 
     NestedModules = @(
         'Config.psm1'
+        'Branches.psm1'
         'Issues.psm1'
+        'Organizations.psm1'
         'PullRequests.psm1'
+        'Releases.psm1'
         'Repositories.psm1'
+        'Users.psm1'
         'Utilities.psm1'
     )
     FunctionsToExport = @(
         # Configuration
-        'Get-GitHubConfiguration'
+        'Get-GithubConfiguration'
 
-        # Repositories
-        'Get-GitHubRepository'
+        # Branches
+        'Get-GithubBranch'
 
         # Issues
-        'Get-GitHubIssue'
+        'Get-GithubIssue'
+
+        # Organizations
+        'Get-GithubOrganization'
 
         # Pull Requests
-        'Get-GitHubPullRequest'
+        'Get-GithubPullRequest'
+
+        # Releases
+        'Get-GithubRelease'
+
+        # Repositories
+        'Get-GithubRepository'
+
+        # Users
+        'Get-GithubUser'
 
         # Utilities
-        'Invoke-GitHubApi'
+        'Invoke-GithubApi'
     )
     AliasesToExport = @()
 }

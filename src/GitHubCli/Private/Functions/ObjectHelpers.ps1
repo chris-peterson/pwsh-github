@@ -26,7 +26,7 @@ function Add-CoalescedProperty {
     }
 }
 
-function New-GitHubObject {
+function New-GithubObject {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions', '', Justification = 'Creates PSCustomObject wrappers, not a state-changing operation')]
     [CmdletBinding()]
     param(
@@ -60,7 +60,7 @@ function New-GitHubObject {
                     $Wrapper | Add-Member -MemberType NoteProperty -Name $Name -Value $Value
                 }
 
-            # GitHub API returns both 'url' (API) and 'html_url' (web).
+            # Github API returns both 'url' (API) and 'html_url' (web).
             # Prefer the web URL for display; overwrite if needed.
             $WebUrl = $Wrapper.HtmlUrl ?? $Wrapper.WebUrl
             if ($WebUrl) {
@@ -74,7 +74,7 @@ function New-GitHubObject {
             if ($DisplayType) {
                 $Wrapper.PSTypeNames.Insert(0, $DisplayType)
 
-                $IdentityPropertyName = $global:GitHubIdentityPropertyNameExemptions[$DisplayType]
+                $IdentityPropertyName = $global:GithubIdentityPropertyNameExemptions[$DisplayType]
                 if ($IdentityPropertyName -eq $null) {
                     $IdentityPropertyName = 'Id'
                 }
