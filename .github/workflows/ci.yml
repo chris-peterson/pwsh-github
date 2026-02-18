@@ -5,11 +5,6 @@ on:
     branches: [ '*' ]
   pull_request:
   workflow_dispatch:
-    inputs:
-      force_publish_module:
-        description: 'Force publish module (bypass change detection)'
-        type: boolean
-        default: false
 
 permissions:
   contents: read
@@ -150,7 +145,7 @@ jobs:
   publish-module:
     name: Publish Module
     needs: release-gate
-    if: needs.release-gate.outputs.changes_in_src == 'true' || inputs.force_publish_module == true
+    if: needs.release-gate.outputs.changes_in_src == 'true' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     environment:
       name: PowerShell Gallery
