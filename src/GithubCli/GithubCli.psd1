@@ -1,9 +1,8 @@
 @{
-    ModuleVersion = '0.1.0'
+    ModuleVersion = '0.2.0'
 
     PrivateData = @{
         PSData = @{
-            Prerelease = 'alpha'
             LicenseUri = 'https://github.com/chris-peterson/pwsh-github/blob/main/LICENSE'
             ProjectUri = 'https://github.com/chris-peterson/pwsh-github'
             Tags = @(
