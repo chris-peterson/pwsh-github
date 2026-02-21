@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '0.2.0'
+    ModuleVersion = '0.3.0'
 
     PrivateData = @{
         PSData = @{
@@ -20,7 +20,7 @@
             )
             ReleaseNotes =
 @'
-Support for
+Initial release
 * Branches (Get, New, Remove)
 * Commits (Get)
 * Comments (Get, New)
