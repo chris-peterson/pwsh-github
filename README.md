@@ -2,10 +2,6 @@
 
 PowerShell module for Github automation.
 
-## Status
-
-**Early development** -- readonly operations for issues, repositories, and pull requests.
-
 ## Getting Started
 
 ### Prerequisites
@@ -71,51 +67,106 @@ Get-GithubRepository -Mine
 ### Issues
 
 ```powershell
-# List open issues for current repo
+# List open issues
 Get-GithubIssue
 
 # Get a specific issue
 Get-GithubIssue 42
 
-# List closed issues
+# Filter by state, assignee, labels
 Get-GithubIssue -State closed
-
-# Filter by assignee
 Get-GithubIssue -Assignee 'octocat'
-
-# Filter by labels
 Get-GithubIssue -Labels 'bug,help wanted'
 
 # Your issues across all repos
 Get-GithubIssue -Mine
+
+# Create, update, close
+New-GithubIssue -Title 'Bug report' -Labels 'bug'
+Update-GithubIssue 42 -Title 'Updated title'
+Close-GithubIssue 42
 ```
 
 ### Pull Requests
 
 ```powershell
-# List open PRs for current repo
+# List open PRs
 Get-GithubPullRequest
 
 # Get a specific PR
 Get-GithubPullRequest 123
 
-# List all PRs (including closed)
-Get-GithubPullRequest -State all
+# Create, merge, close
+New-GithubPullRequest -Title 'My feature' -SourceBranch 'feature-branch'
+Merge-GithubPullRequest 123 -MergeMethod squash -DeleteSourceBranch
+Close-GithubPullRequest 123
+```
 
-# Filter by branch
-Get-GithubPullRequest -Head 'feature-branch'
+### Branches
 
-# Your PRs
-Get-GithubPullRequest -Mine
+```powershell
+Get-GithubBranch
+New-GithubBranch 'feature-branch'
+Remove-GithubBranch 'feature-branch'
+```
 
-# Reviews for a PR
-Get-GithubPullRequestReview 123
+### Pipeline Chaining
+
+Objects carry their parent identifiers, so you can pipe between commands without repeating parameters:
+
+```powershell
+# Close an issue (RepositoryId flows through the pipeline)
+Get-GithubIssue 42 | Close-GithubIssue
+
+# Get comments for an issue
+Get-GithubIssue 42 | Get-GithubIssueComment
+
+# Comment on a PR
+Get-GithubPullRequest 123 | New-GithubPullRequestComment -Body 'LGTM'
+
+# Merge a PR
+Get-GithubPullRequest 123 | Merge-GithubPullRequest -MergeMethod squash
+
+# Create a branch from a repository
+Get-GithubRepository | New-GithubBranch -Name 'feature-branch'
+
+# Get jobs for a workflow run
+Get-GithubWorkflowRun 456 | Get-GithubWorkflowJob
+```
+
+### Labels, Milestones, Releases
+
+```powershell
+Get-GithubLabel
+New-GithubLabel -Name 'priority' -Color 'ff0000'
+
+Get-GithubMilestone
+New-GithubMilestone -Title 'v2.0'
+
+Get-GithubRelease
+Get-GithubRelease -Latest
+```
+
+### Workflows
+
+```powershell
+Get-GithubWorkflow
+Get-GithubWorkflowRun -Status completed
+Get-GithubWorkflowRun 789 | Get-GithubWorkflowJob
+
+Start-GithubWorkflowRun -WorkflowId 'ci.yml'
+```
+
+### Search
+
+```powershell
+Search-Github 'error handling' -Scope code
+Search-GithubRepository 'TODO' -Scope code
 ```
 
 ### Direct API Access
 
 ```powershell
-# Call any Github API endpoint directly
 Invoke-GithubApi GET 'repos/chris-peterson/pwsh-github/contributors'
 ```
 

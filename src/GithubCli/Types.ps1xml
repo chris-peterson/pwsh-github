@@ -10,6 +10,49 @@
     </Members>
   </Type>
   <Type>
+    <Name>Github.Comment</Name>
+    <Members>
+      <ScriptProperty>
+        <Name>AuthorName</Name>
+        <GetScriptBlock>$this.User.Login</GetScriptBlock>
+      </ScriptProperty>
+    </Members>
+  </Type>
+  <Type>
+    <Name>Github.Commit</Name>
+    <Members>
+      <ScriptProperty>
+        <Name>ShortId</Name>
+        <GetScriptBlock>$this.Sha.Substring(0, 8)</GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
+        <Name>CommittedDate</Name>
+        <GetScriptBlock>$this.Commit.Author.Date</GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
+        <Name>AuthorName</Name>
+        <GetScriptBlock>if ($this.Author.Login) { $this.Author.Login } else { $this.Commit.Author.Name }</GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
+        <Name>MessageTitle</Name>
+        <GetScriptBlock>($this.Commit.Message -split "`n")[0]</GetScriptBlock>
+      </ScriptProperty>
+    </Members>
+  </Type>
+  <Type>
+    <Name>Github.Event</Name>
+    <Members>
+      <ScriptProperty>
+        <Name>ActorName</Name>
+        <GetScriptBlock>$this.Actor.Login</GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
+        <Name>Summary</Name>
+        <GetScriptBlock>if ($this.Repo) { $this.Repo.Name } else { $this.Type }</GetScriptBlock>
+      </ScriptProperty>
+    </Members>
+  </Type>
+  <Type>
     <Name>Github.Issue</Name>
     <Members>
       <ScriptProperty>
@@ -19,6 +62,33 @@
       <ScriptProperty>
         <Name>AssigneeName</Name>
         <GetScriptBlock>$this.Assignee.Login</GetScriptBlock>
+      </ScriptProperty>
+    </Members>
+  </Type>
+  <Type>
+    <Name>Github.Label</Name>
+    <Members>
+      <ScriptProperty>
+        <Name>DisplayColor</Name>
+        <GetScriptBlock>'#' + $this.Color</GetScriptBlock>
+      </ScriptProperty>
+    </Members>
+  </Type>
+  <Type>
+    <Name>Github.Member</Name>
+    <Members>
+      <ScriptProperty>
+        <Name>Username</Name>
+        <GetScriptBlock>$this.Login</GetScriptBlock>
+      </ScriptProperty>
+    </Members>
+  </Type>
+  <Type>
+    <Name>Github.Milestone</Name>
+    <Members>
+      <ScriptProperty>
+        <Name>DueDate</Name>
+        <GetScriptBlock>if ($this.DueOn) { $this.DueOn }</GetScriptBlock>
       </ScriptProperty>
     </Members>
   </Type>
@@ -54,6 +124,24 @@
       <ScriptProperty>
         <Name>LastActivityAt</Name>
         <GetScriptBlock>$this.PushedAt</GetScriptBlock>
+      </ScriptProperty>
+    </Members>
+  </Type>
+  <Type>
+    <Name>Github.WorkflowRun</Name>
+    <Members>
+      <ScriptProperty>
+        <Name>Duration</Name>
+        <GetScriptBlock>if ($this.CreatedAt -and $this.UpdatedAt) { $this.UpdatedAt - $this.CreatedAt }</GetScriptBlock>
+      </ScriptProperty>
+    </Members>
+  </Type>
+  <Type>
+    <Name>Github.WorkflowJob</Name>
+    <Members>
+      <ScriptProperty>
+        <Name>Duration</Name>
+        <GetScriptBlock>if ($this.StartedAt -and $this.CompletedAt) { $this.CompletedAt - $this.StartedAt }</GetScriptBlock>
       </ScriptProperty>
     </Members>
   </Type>
