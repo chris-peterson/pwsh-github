@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '0.4.0'
+    ModuleVersion = '0.5.0'
 
     PrivateData = @{
         PSData = @{
@@ -20,22 +20,11 @@
             )
             ReleaseNotes =
 @'
-Initial release
-* Branches (Get, New, Remove)
-* Commits (Get)
-* Comments (Get, New)
-* Events (Get)
-* Issues (Get, New, Update, Close, Open)
-* Labels (Get, New, Update, Remove)
-* Members (Org Members, Repo Collaborators)
-* Milestones (Get, New, Update, Remove)
-* Organizations (Get)
-* Pull Requests (Get, New, Update, Merge, Close, Comments)
-* Releases (Get)
-* Repositories (Get, New, Update, Remove)
-* Search (Global, Per-Repository)
-* Users (Get)
-* Workflows (Get, Runs, Jobs, Logs, Start)
+## 0.5.0
+
+### Features
+* Pull requests can now be filtered by author, draft status, and date using -Author, -IsDraft, and -Since parameters
+* Pull request draft status can now be toggled using -Draft and -MarkReady switches on Update-GithubPullRequest
 '@
         }
     }
