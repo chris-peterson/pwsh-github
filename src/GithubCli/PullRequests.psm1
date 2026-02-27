@@ -30,6 +30,18 @@ function Get-GithubPullRequest {
         $Base,
 
         [Parameter()]
+        [string]
+        $Author,
+
+        [Parameter()]
+        [switch]
+        $IsDraft,
+
+        [Parameter()]
+        [string]
+        $Since,
+
+        [Parameter()]
         [ValidateSet('created', 'updated', 'popularity', 'long-running')]
         [string]
         $Sort,
@@ -66,8 +78,24 @@ function Get-GithubPullRequest {
                     New-GithubObject 'Github.PullRequest' |
                     Add-Member -NotePropertyMembers @{ RepositoryId = $Repo } -PassThru
             }
-            # https://docs.github.com/en/rest/pulls/pulls#list-pull-requests
-            $Result = Invoke-GithubApi GET "repos/$Repo/pulls" $Query -MaxPages $MaxPages
+            if ($Author -or $IsDraft -or $Since) {
+                # Use search API for filters not supported by the list endpoint
+                $SearchQuery = "is:pr repo:$Repo"
+                if ($State -and $State -ne 'all') { $SearchQuery += " is:$State" }
+                if ($Author)  { $SearchQuery += " author:$Author" }
+                if ($IsDraft) { $SearchQuery += " draft:true" }
+                if ($Since)   { $SearchQuery += " created:>=$Since" }
+                if ($Head)    { $SearchQuery += " head:$Head" }
+                if ($Base)    { $SearchQuery += " base:$Base" }
+                $SearchParams = @{ q = $SearchQuery }
+                if ($Sort)      { $SearchParams.sort  = $Sort }
+                if ($Direction) { $SearchParams.order = $Direction }
+                $Result = Invoke-GithubApi GET "search/issues" $SearchParams -MaxPages $MaxPages |
+                    Select-Object -ExpandProperty items
+            } else {
+                # https://docs.github.com/en/rest/pulls/pulls#list-pull-requests
+                $Result = Invoke-GithubApi GET "repos/$Repo/pulls" $Query -MaxPages $MaxPages
+            }
         }
         'Mine' {
             # Use search API to find PRs authored by current user
@@ -76,6 +104,8 @@ function Get-GithubPullRequest {
             if ($State -ne 'all') {
                 $SearchQuery += " is:$State"
             }
+            if ($IsDraft) { $SearchQuery += " draft:true" }
+            if ($Since)   { $SearchQuery += " created:>=$Since" }
             $Result = Invoke-GithubApi GET "search/issues" @{ q = $SearchQuery } -MaxPages $MaxPages |
                 Select-Object -ExpandProperty items
         }
@@ -178,6 +208,14 @@ function Update-GithubPullRequest {
 
         [Parameter()]
         [switch]
+        $Draft,
+
+        [Parameter()]
+        [switch]
+        $MarkReady,
+
+        [Parameter()]
+        [switch]
         $MaintainerCanModify
     )
 
@@ -191,10 +229,35 @@ function Update-GithubPullRequest {
     if ($MaintainerCanModify) { $RequestBody.maintainer_can_modify = $true }
 
     if ($PSCmdlet.ShouldProcess("$Repo #$PullRequestId", 'Update pull request')) {
-        # https://docs.github.com/en/rest/pulls/pulls#update-a-pull-request
-        Invoke-GithubApi PATCH "repos/$Repo/pulls/$PullRequestId" -Body $RequestBody |
-            New-GithubObject 'Github.PullRequest' |
-            Add-Member -NotePropertyMembers @{ RepositoryId = $Repo } -PassThru
+        if ($Draft -or $MarkReady) {
+            $PR = Invoke-GithubApi GET "repos/$Repo/pulls/$PullRequestId"
+            $NodeId = $PR.node_id
+            if ($Draft) {
+                # https://docs.github.com/en/graphql/reference/mutations#convertpullrequesttodraft
+                Invoke-GithubApi POST 'graphql' -Body @{
+                    query     = 'mutation($id: ID!) { convertPullRequestToDraft(input: {pullRequestId: $id}) { pullRequest { id } } }'
+                    variables = @{ id = $NodeId }
+                } | Out-Null
+            }
+            if ($MarkReady) {
+                # https://docs.github.com/en/graphql/reference/mutations#markpullrequestasready
+                Invoke-GithubApi POST 'graphql' -Body @{
+                    query     = 'mutation($id: ID!) { markPullRequestAsReady(input: {pullRequestId: $id}) { pullRequest { id } } }'
+                    variables = @{ id = $NodeId }
+                } | Out-Null
+            }
+        }
+
+        if ($RequestBody.Count -gt 0) {
+            # https://docs.github.com/en/rest/pulls/pulls#update-a-pull-request
+            Invoke-GithubApi PATCH "repos/$Repo/pulls/$PullRequestId" -Body $RequestBody |
+                New-GithubObject 'Github.PullRequest' |
+                Add-Member -NotePropertyMembers @{ RepositoryId = $Repo } -PassThru
+        } else {
+            Invoke-GithubApi GET "repos/$Repo/pulls/$PullRequestId" |
+                New-GithubObject 'Github.PullRequest' |
+                Add-Member -NotePropertyMembers @{ RepositoryId = $Repo } -PassThru
+        }
     }
 }
 
