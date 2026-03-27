@@ -5,6 +5,11 @@ on:
     branches: [ '*' ]
   pull_request:
   workflow_dispatch:
+    inputs:
+      force_publish_docs:
+        description: 'Force publish docs (bypass change detection)'
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -130,6 +135,7 @@ jobs:
     if: github.event.repository.fork == false && github.ref_name == 'main'
     runs-on: ubuntu-latest
     outputs:
+      changes_in_docs: ${{ steps.changes.outputs.docs }}
       changes_in_src: ${{ steps.changes.outputs.src }}
     steps:
       - uses: actions/checkout@v6
@@ -138,6 +144,8 @@ jobs:
         id: changes
         with:
           filters: |
+            docs:
+              - 'docs/**'
             src:
               - 'src/**'
       - run: echo "All checks passed, proceeding with deployment"
@@ -158,3 +166,35 @@ jobs:
         uses: chris-peterson/publish-powershell@v1
         with:
           ApiKey: ${{ secrets.PSGALLERY_API_KEY }}
+
+  publish-docs:
+    name: Publish Documentation
+    needs: release-gate
+    if: needs.release-gate.outputs.changes_in_docs == 'true' || inputs.force_publish_docs == true
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Generate icon.png from SVG
+        run: |
+          sudo apt-get install -y librsvg2-bin
+          rsvg-convert docs/favicon.svg -w 256 -h 256 -o docs/icon.png
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: docs
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
