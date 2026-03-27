@@ -9,6 +9,9 @@ test:
     $Config.Run.Exit = $true
     Invoke-Pester -Configuration $Config
 
+docs:
+    docsify serve docs --open
+
 lint:
     #!/usr/bin/env pwsh
     $Results = Invoke-ScriptAnalyzer -Path ./src -Recurse -Settings ./PSScriptAnalyzerSettings.ps1
