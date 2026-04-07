@@ -6,6 +6,8 @@ $global:GithubConfigurationPath = Join-Path $env:HOME "/.config/powershell/githu
 $global:GithubBaseUrl              = 'https://api.github.com'
 $global:GithubDefaultMaxPages      = 10
 
+$global:GithubCache = @{}
+
 $global:GithubIdentityPropertyNameExemptions = @{
     'Github.Branch'             = 'Name'
     'Github.Comment'            = 'Id'

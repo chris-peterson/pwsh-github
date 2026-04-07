@@ -57,7 +57,7 @@
     <Members>
       <ScriptProperty>
         <Name>AuthorName</Name>
-        <GetScriptBlock>$this.User.Login</GetScriptBlock>
+        <GetScriptBlock>Resolve-GithubUserName $this.User.Login</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>AssigneeName</Name>
@@ -101,7 +101,7 @@
     <Members>
       <ScriptProperty>
         <Name>AuthorName</Name>
-        <GetScriptBlock>$this.User.Login</GetScriptBlock>
+        <GetScriptBlock>Resolve-GithubUserName $this.User.Login</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>AssigneeName</Name>

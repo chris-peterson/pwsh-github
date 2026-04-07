@@ -49,6 +49,7 @@
     ScriptsToProcess = @(
         'Private/Functions/StringHelpers.ps1'
         'Private/Functions/ObjectHelpers.ps1'
+        'Private/Functions/CacheHelpers.ps1'
         'Private/Functions/PaginationHelpers.ps1'
         'Private/Functions/GitHelpers.ps1'
         'Private/Globals.ps1'
