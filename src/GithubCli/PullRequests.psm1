@@ -16,7 +16,7 @@ function Get-GithubPullRequest {
         $Mine,
 
         [Parameter()]
-        [ValidateSet('open', 'closed', 'all')]
+        [ValidateSet('open', 'closed', 'all', 'merged')]
         [string]
         $State = 'open',
 
@@ -42,6 +42,14 @@ function Get-GithubPullRequest {
         $Since,
 
         [Parameter()]
+        [string]
+        $Until,
+
+        [Parameter()]
+        [string]
+        $ReviewedBy,
+
+        [Parameter()]
         [ValidateSet('created', 'updated', 'popularity', 'long-running')]
         [string]
         $Sort,
@@ -63,7 +71,7 @@ function Get-GithubPullRequest {
     $MaxPages = Resolve-GithubMaxPages -MaxPages:$MaxPages -All:$All
 
     $Query = @{}
-    if ($State)     { $Query.state     = $State }
+    if ($State -and $State -ne 'merged') { $Query.state = $State }
     if ($Head)      { $Query.head      = $Head }
     if ($Base)      { $Query.base      = $Base }
     if ($Sort)      { $Query.sort      = $Sort }
@@ -78,15 +86,17 @@ function Get-GithubPullRequest {
                     New-GithubObject 'Github.PullRequest' |
                     Add-Member -NotePropertyMembers @{ RepositoryId = $Repo } -PassThru
             }
-            if ($Author -or $IsDraft -or $Since) {
+            if ($Author -or $IsDraft -or $Since -or $Until -or $ReviewedBy -or $State -eq 'merged') {
                 # Use search API for filters not supported by the list endpoint
                 $SearchQuery = "is:pr repo:$Repo"
                 if ($State -and $State -ne 'all') { $SearchQuery += " is:$State" }
-                if ($Author)  { $SearchQuery += " author:$Author" }
-                if ($IsDraft) { $SearchQuery += " draft:true" }
-                if ($Since)   { $SearchQuery += " created:>=$Since" }
-                if ($Head)    { $SearchQuery += " head:$Head" }
-                if ($Base)    { $SearchQuery += " base:$Base" }
+                if ($Author)     { $SearchQuery += " author:$Author" }
+                if ($IsDraft)    { $SearchQuery += " draft:true" }
+                if ($Since)      { $SearchQuery += " created:>=$Since" }
+                if ($Until)      { $SearchQuery += " created:<=$Until" }
+                if ($ReviewedBy) { $SearchQuery += " reviewed-by:$ReviewedBy" }
+                if ($Head)       { $SearchQuery += " head:$Head" }
+                if ($Base)       { $SearchQuery += " base:$Base" }
                 $SearchParams = @{ q = $SearchQuery }
                 if ($Sort)      { $SearchParams.sort  = $Sort }
                 if ($Direction) { $SearchParams.order = $Direction }
@@ -101,11 +111,13 @@ function Get-GithubPullRequest {
             # Use search API to find PRs authored by current user
             $User = Invoke-GithubApi GET "user"
             $SearchQuery = "is:pr author:$($User.login)"
-            if ($State -ne 'all') {
+            if ($State -and $State -ne 'all') {
                 $SearchQuery += " is:$State"
             }
-            if ($IsDraft) { $SearchQuery += " draft:true" }
-            if ($Since)   { $SearchQuery += " created:>=$Since" }
+            if ($IsDraft)    { $SearchQuery += " draft:true" }
+            if ($Since)      { $SearchQuery += " created:>=$Since" }
+            if ($Until)      { $SearchQuery += " created:<=$Until" }
+            if ($ReviewedBy) { $SearchQuery += " reviewed-by:$ReviewedBy" }
             $Result = Invoke-GithubApi GET "search/issues" @{ q = $SearchQuery } -MaxPages $MaxPages |
                 Select-Object -ExpandProperty items
         }

@@ -63,6 +63,10 @@
         <Name>AssigneeName</Name>
         <GetScriptBlock>$this.Assignee.Login</GetScriptBlock>
       </ScriptProperty>
+      <ScriptProperty>
+        <Name>ProjectPath</Name>
+        <GetScriptBlock>$this.HtmlUrl -match '://[^/]+/(?&lt;ProjectPath&gt;[^/]+/[^/]+)/' | Out-Null; $Matches.ProjectPath</GetScriptBlock>
+      </ScriptProperty>
     </Members>
   </Type>
   <Type>
@@ -102,6 +106,10 @@
       <ScriptProperty>
         <Name>AssigneeName</Name>
         <GetScriptBlock>$this.Assignee.Login</GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
+        <Name>ProjectPath</Name>
+        <GetScriptBlock>$this.HtmlUrl -match '://[^/]+/(?&lt;ProjectPath&gt;[^/]+/[^/]+)/' | Out-Null; $Matches.ProjectPath</GetScriptBlock>
       </ScriptProperty>
     </Members>
   </Type>
