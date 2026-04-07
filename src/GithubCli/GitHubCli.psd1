@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '0.5.0'
+    ModuleVersion = '0.6.0'
 
     PrivateData = @{
         PSData = @{
@@ -20,11 +20,13 @@
             )
             ReleaseNotes =
 @'
-## 0.5.0
+## 0.6.0
 
 ### Features
-* Pull requests can now be filtered by author, draft status, and date using -Author, -IsDraft, and -Since parameters
-* Pull request draft status can now be toggled using -Draft and -MarkReady switches on Update-GithubPullRequest
+* Add ProjectPath computed property to PullRequest and Issue types
+* Add `merged` state support to Get-GithubPullRequest (uses search API with `is:merged`)
+* Add -Until parameter to Get-GithubPullRequest for date range end filtering
+* Add -ReviewedBy parameter to Get-GithubPullRequest for reviewer filtering
 '@
         }
     }
