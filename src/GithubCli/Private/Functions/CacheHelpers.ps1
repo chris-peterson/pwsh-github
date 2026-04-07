@@ -67,10 +67,12 @@ function Resolve-GithubUserName {
     [CmdletBinding()]
     [OutputType([string])]
     param(
-        [Parameter(Mandatory)]
+        [Parameter()]
         [string]
         $Login
     )
+
+    if (-not $Login) { return $null }
 
     $Cache = Get-GithubCache
 
