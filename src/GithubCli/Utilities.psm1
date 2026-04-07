@@ -73,7 +73,9 @@ function Invoke-GithubApi {
 
     Write-Verbose "Request: $($RestMethodParams.Method) $($RestMethodParams.Uri)"
     $Result = Invoke-RestMethod @RestMethodParams
-    Write-Verbose "Response: $($Result | ConvertTo-Json -Depth 5)"
+    if ($VerbosePreference -ne 'SilentlyContinue') {
+        Write-Verbose "Response: $($Result | ConvertTo-Json -Depth 10 -WarningAction SilentlyContinue)"
+    }
     if($MaxPages -gt 1) {
         $Result | ForEach-Object {
             Write-Output $_
