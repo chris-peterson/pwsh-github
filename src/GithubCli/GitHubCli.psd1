@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '0.6.0'
+    ModuleVersion = '0.7.0'
 
     PrivateData = @{
         PSData = @{
@@ -20,13 +20,15 @@
             )
             ReleaseNotes =
 @'
-## 0.6.0
+## 0.7.0
 
 ### Features
-* Add ProjectPath computed property to PullRequest and Issue types
-* Add `merged` state support to Get-GithubPullRequest (uses search API with `is:merged`)
-* Add -Until parameter to Get-GithubPullRequest for date range end filtering
-* Add -ReviewedBy parameter to Get-GithubPullRequest for reviewer filtering
+* Add -Search parameter set to Get-GithubPullRequest for cross-repo search without requiring a repository context
+* Promote `pull_request.merged_at` to top-level `MergedAt` on search API results
+* Add Get-GithubPullRequestReview for listing PR reviews
+
+### Fixes
+* Suppress JSON truncation warning in verbose logging
 '@
         }
     }
@@ -126,6 +128,7 @@
         'Update-GithubPullRequest'
         'Merge-GithubPullRequest'
         'Close-GithubPullRequest'
+        'Get-GithubPullRequestReview'
         'Get-GithubPullRequestComment'
         'New-GithubPullRequestComment'
 

@@ -71,6 +71,16 @@ function New-GithubObject {
                 }
             }
 
+            # Promote nested pull_request.merged_at to top-level MergedAt
+            # (GitHub search API nests merged_at inside a pull_request sub-object)
+            if ($Wrapper.PullRequest.merged_at -and -not $Wrapper.PSObject.Properties['MergedAt']) {
+                $MergedAtValue = $Wrapper.PullRequest.merged_at
+                if ($MergedAtValue -is [string]) {
+                    try { $MergedAtValue = [datetime]::Parse($MergedAtValue) } catch { Write-Debug "Failed to parse MergedAt: $MergedAtValue" }
+                }
+                $Wrapper | Add-Member -MemberType NoteProperty -Name 'MergedAt' -Value $MergedAtValue
+            }
+
             if ($DisplayType) {
                 $Wrapper.PSTypeNames.Insert(0, $DisplayType)
 

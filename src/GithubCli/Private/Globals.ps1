@@ -18,6 +18,7 @@ $global:GithubIdentityPropertyNameExemptions = @{
     'Github.Milestone'          = 'Number'
     'Github.Organization'       = 'Id'
     'Github.PullRequest'        = 'Number'
+    'Github.Review'             = 'Id'
     'Github.Release'            = 'Id'
     'Github.Repository'         = 'Id'
     'Github.SearchResult'       = ''

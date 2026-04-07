@@ -15,17 +15,21 @@ function Get-GithubPullRequest {
         [switch]
         $Mine,
 
+        [Parameter(Mandatory, ParameterSetName='Search')]
+        [switch]
+        $Search,
+
         [Parameter()]
         [ValidateSet('open', 'closed', 'all', 'merged')]
         [string]
         $State = 'open',
 
-        [Parameter()]
+        [Parameter(ParameterSetName='ByRepo')]
         [Alias('Branch')]
         [string]
         $Head,
 
-        [Parameter()]
+        [Parameter(ParameterSetName='ByRepo')]
         [string]
         $Base,
 
@@ -119,6 +123,21 @@ function Get-GithubPullRequest {
             if ($Until)      { $SearchQuery += " created:<=$Until" }
             if ($ReviewedBy) { $SearchQuery += " reviewed-by:$ReviewedBy" }
             $Result = Invoke-GithubApi GET "search/issues" @{ q = $SearchQuery } -MaxPages $MaxPages |
+                Select-Object -ExpandProperty items
+        }
+        'Search' {
+            # Cross-repo search without requiring a repository context
+            $SearchQuery = "is:pr"
+            if ($State -and $State -ne 'all') { $SearchQuery += " is:$State" }
+            if ($Author)     { $SearchQuery += " author:$Author" }
+            if ($IsDraft)    { $SearchQuery += " draft:true" }
+            if ($Since)      { $SearchQuery += " created:>=$Since" }
+            if ($Until)      { $SearchQuery += " created:<=$Until" }
+            if ($ReviewedBy) { $SearchQuery += " reviewed-by:$ReviewedBy" }
+            $SearchParams = @{ q = $SearchQuery }
+            if ($Sort)      { $SearchParams.sort  = $Sort }
+            if ($Direction) { $SearchParams.order = $Direction }
+            $Result = Invoke-GithubApi GET "search/issues" $SearchParams -MaxPages $MaxPages |
                 Select-Object -ExpandProperty items
         }
     }
@@ -345,6 +364,28 @@ function Close-GithubPullRequest {
     if ($PSCmdlet.ShouldProcess("$RepositoryId #$PullRequestId", 'Close pull request')) {
         Update-GithubPullRequest -RepositoryId $RepositoryId -PullRequestId $PullRequestId -State closed
     }
+}
+
+function Get-GithubPullRequestReview {
+    [CmdletBinding()]
+    [OutputType('Github.Review')]
+    param(
+        [Parameter(ValueFromPipelineByPropertyName)]
+        [string]
+        $RepositoryId = '.',
+
+        [Parameter(Mandatory, Position=0, ValueFromPipelineByPropertyName)]
+        [Alias('Id')]
+        [int]
+        $PullRequestId
+    )
+
+    $Repo = Resolve-GithubRepository $RepositoryId
+
+    # https://docs.github.com/en/rest/pulls/reviews#list-reviews-for-a-pull-request
+    Invoke-GithubApi GET "repos/$Repo/pulls/$PullRequestId/reviews" |
+        New-GithubObject 'Github.Review' |
+        Add-Member -NotePropertyMembers @{ RepositoryId = $Repo; PullRequestId = $PullRequestId } -PassThru
 }
 
 function Get-GithubPullRequestComment {
