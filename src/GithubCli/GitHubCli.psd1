@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '0.7.0'
+    ModuleVersion = '0.8.0'
 
     PrivateData = @{
         PSData = @{
@@ -20,15 +20,11 @@
             )
             ReleaseNotes =
 @'
-## 0.7.0
+## 0.8.0
 
 ### Features
-* Add -Search parameter set to Get-GithubPullRequest for cross-repo search without requiring a repository context
-* Promote `pull_request.merged_at` to top-level `MergedAt` on search API results
-* Add Get-GithubPullRequestReview for listing PR reviews
-
-### Fixes
-* Suppress JSON truncation warning in verbose logging
+* Issue and pull request authors now display as full names instead of login handles, matching GitLab behavior and fixing downstream team mapping
+* User name lookups are cached to disk, so repeated sessions avoid redundant API calls
 '@
         }
     }
