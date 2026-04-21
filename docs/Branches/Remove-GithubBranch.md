@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: Branches-Help.xml
 HelpUri: ''
 Locale: en-US
 Module Name: Branches
-ms.date: 03/26/2026
+ms.date: 04/21/2026
 PlatyPS schema version: 2024-05-01
 title: Remove-GithubBranch
 ---
@@ -146,9 +146,6 @@ Deletes a branch from a GitHub repository by removing the git reference.
 
 ## NOTES
 
-
-
 ## RELATED LINKS
 
-[https://docs.github.com/en/rest/git/refs#delete-a-reference](https://docs.github.com/en/rest/git/refs#delete-a-reference)
-
+- [https://docs.github.com/en/rest/git/refs#delete-a-reference](https://docs.github.com/en/rest/git/refs#delete-a-reference)

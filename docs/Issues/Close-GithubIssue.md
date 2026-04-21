@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: Issues-Help.xml
 HelpUri: ''
 Locale: en-US
 Module Name: Issues
-ms.date: 03/26/2026
+ms.date: 04/21/2026
 PlatyPS schema version: 2024-05-01
 title: Close-GithubIssue
 ---
@@ -146,9 +146,6 @@ A GitHub issue object.
 
 ## NOTES
 
-
-
 ## RELATED LINKS
 
-[https://docs.github.com/en/rest/issues/issues#update-an-issue](https://docs.github.com/en/rest/issues/issues#update-an-issue)
-
+- [https://docs.github.com/en/rest/issues/issues#update-an-issue](https://docs.github.com/en/rest/issues/issues#update-an-issue)

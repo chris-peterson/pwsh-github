@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: Workflows-Help.xml
 HelpUri: ''
 Locale: en-US
 Module Name: Workflows
-ms.date: 03/26/2026
+ms.date: 04/21/2026
 PlatyPS schema version: 2024-05-01
 title: Start-GithubWorkflowRun
 ---
@@ -191,9 +191,6 @@ Dispatches a GitHub Actions workflow run. By default triggers on the repository'
 
 ## NOTES
 
-
-
 ## RELATED LINKS
 
-[https://docs.github.com/en/rest/actions/workflows#create-a-workflow-dispatch-event](https://docs.github.com/en/rest/actions/workflows#create-a-workflow-dispatch-event)
-
+- [https://docs.github.com/en/rest/actions/workflows#create-a-workflow-dispatch-event](https://docs.github.com/en/rest/actions/workflows#create-a-workflow-dispatch-event)

@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: PullRequests-Help.xml
 HelpUri: ''
 Locale: en-US
 Module Name: PullRequests
-ms.date: 03/26/2026
+ms.date: 04/21/2026
 PlatyPS schema version: 2024-05-01
 title: Merge-GithubPullRequest
 ---
@@ -235,9 +235,6 @@ A GitHub pull request object.
 
 ## NOTES
 
-
-
 ## RELATED LINKS
 
-[https://docs.github.com/en/rest/pulls/pulls#merge-a-pull-request](https://docs.github.com/en/rest/pulls/pulls#merge-a-pull-request)
-
+- [https://docs.github.com/en/rest/pulls/pulls#merge-a-pull-request](https://docs.github.com/en/rest/pulls/pulls#merge-a-pull-request)

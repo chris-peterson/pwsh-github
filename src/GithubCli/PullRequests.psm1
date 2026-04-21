@@ -43,11 +43,19 @@ function Get-GithubPullRequest {
 
         [Parameter()]
         [string]
-        $Since,
+        $CreatedAfter,
 
         [Parameter()]
         [string]
-        $Until,
+        $CreatedBefore,
+
+        [Parameter()]
+        [string]
+        $MergedAfter,
+
+        [Parameter()]
+        [string]
+        $MergedBefore,
 
         [Parameter()]
         [string]
@@ -90,15 +98,17 @@ function Get-GithubPullRequest {
                     New-GithubObject 'Github.PullRequest' |
                     Add-Member -NotePropertyMembers @{ RepositoryId = $Repo } -PassThru
             }
-            if ($Author -or $IsDraft -or $Since -or $Until -or $ReviewedBy -or $State -eq 'merged') {
+            if ($Author -or $IsDraft -or $CreatedAfter -or $CreatedBefore -or $MergedAfter -or $MergedBefore -or $ReviewedBy -or $State -eq 'merged') {
                 # Use search API for filters not supported by the list endpoint
                 $SearchQuery = "is:pr repo:$Repo"
                 if ($State -and $State -ne 'all') { $SearchQuery += " is:$State" }
-                if ($Author)     { $SearchQuery += " author:$Author" }
-                if ($IsDraft)    { $SearchQuery += " draft:true" }
-                if ($Since)      { $SearchQuery += " created:>=$Since" }
-                if ($Until)      { $SearchQuery += " created:<=$Until" }
-                if ($ReviewedBy) { $SearchQuery += " reviewed-by:$ReviewedBy" }
+                if ($Author)        { $SearchQuery += " author:$Author" }
+                if ($IsDraft)       { $SearchQuery += " draft:true" }
+                if ($CreatedAfter)  { $SearchQuery += " created:>=$CreatedAfter" }
+                if ($CreatedBefore) { $SearchQuery += " created:<=$CreatedBefore" }
+                if ($MergedAfter)   { $SearchQuery += " merged:>=$MergedAfter" }
+                if ($MergedBefore)  { $SearchQuery += " merged:<=$MergedBefore" }
+                if ($ReviewedBy)    { $SearchQuery += " reviewed-by:$ReviewedBy" }
                 if ($Head)       { $SearchQuery += " head:$Head" }
                 if ($Base)       { $SearchQuery += " base:$Base" }
                 $SearchParams = @{ q = $SearchQuery }
@@ -118,10 +128,12 @@ function Get-GithubPullRequest {
             if ($State -and $State -ne 'all') {
                 $SearchQuery += " is:$State"
             }
-            if ($IsDraft)    { $SearchQuery += " draft:true" }
-            if ($Since)      { $SearchQuery += " created:>=$Since" }
-            if ($Until)      { $SearchQuery += " created:<=$Until" }
-            if ($ReviewedBy) { $SearchQuery += " reviewed-by:$ReviewedBy" }
+            if ($IsDraft)       { $SearchQuery += " draft:true" }
+            if ($CreatedAfter)  { $SearchQuery += " created:>=$CreatedAfter" }
+            if ($CreatedBefore) { $SearchQuery += " created:<=$CreatedBefore" }
+            if ($MergedAfter)   { $SearchQuery += " merged:>=$MergedAfter" }
+            if ($MergedBefore)  { $SearchQuery += " merged:<=$MergedBefore" }
+            if ($ReviewedBy)    { $SearchQuery += " reviewed-by:$ReviewedBy" }
             $Result = Invoke-GithubApi GET "search/issues" @{ q = $SearchQuery } -MaxPages $MaxPages |
                 Select-Object -ExpandProperty items
         }
@@ -129,11 +141,13 @@ function Get-GithubPullRequest {
             # Cross-repo search without requiring a repository context
             $SearchQuery = "is:pr"
             if ($State -and $State -ne 'all') { $SearchQuery += " is:$State" }
-            if ($Author)     { $SearchQuery += " author:$Author" }
-            if ($IsDraft)    { $SearchQuery += " draft:true" }
-            if ($Since)      { $SearchQuery += " created:>=$Since" }
-            if ($Until)      { $SearchQuery += " created:<=$Until" }
-            if ($ReviewedBy) { $SearchQuery += " reviewed-by:$ReviewedBy" }
+            if ($Author)        { $SearchQuery += " author:$Author" }
+            if ($IsDraft)       { $SearchQuery += " draft:true" }
+            if ($CreatedAfter)  { $SearchQuery += " created:>=$CreatedAfter" }
+            if ($CreatedBefore) { $SearchQuery += " created:<=$CreatedBefore" }
+            if ($MergedAfter)   { $SearchQuery += " merged:>=$MergedAfter" }
+            if ($MergedBefore)  { $SearchQuery += " merged:<=$MergedBefore" }
+            if ($ReviewedBy)    { $SearchQuery += " reviewed-by:$ReviewedBy" }
             $SearchParams = @{ q = $SearchQuery }
             if ($Sort)      { $SearchParams.sort  = $Sort }
             if ($Direction) { $SearchParams.order = $Direction }

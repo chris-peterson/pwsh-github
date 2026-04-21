@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: Workflows-Help.xml
 HelpUri: ''
 Locale: en-US
 Module Name: Workflows
-ms.date: 03/26/2026
+ms.date: 04/21/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GithubWorkflowRunLog
 ---
@@ -101,9 +101,6 @@ A string value.
 
 ## NOTES
 
-
-
 ## RELATED LINKS
 
-[https://docs.github.com/en/rest/actions/workflow-jobs#download-job-logs-for-a-workflow-run](https://docs.github.com/en/rest/actions/workflow-jobs#download-job-logs-for-a-workflow-run)
-
+- [https://docs.github.com/en/rest/actions/workflow-jobs#download-job-logs-for-a-workflow-run](https://docs.github.com/en/rest/actions/workflow-jobs#download-job-logs-for-a-workflow-run)

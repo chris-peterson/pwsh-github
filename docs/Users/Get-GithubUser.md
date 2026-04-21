@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: Users-Help.xml
 HelpUri: ''
 Locale: en-US
 Module Name: Users
-ms.date: 03/26/2026
+ms.date: 04/21/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GithubUser
 ---
@@ -124,9 +124,6 @@ A GitHub user object.
 
 ## NOTES
 
-
-
 ## RELATED LINKS
 
-[https://docs.github.com/en/rest/users/users](https://docs.github.com/en/rest/users/users)
-
+- [https://docs.github.com/en/rest/users/users](https://docs.github.com/en/rest/users/users)

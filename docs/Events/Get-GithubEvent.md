@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: Events-Help.xml
 HelpUri: ''
 Locale: en-US
 Module Name: Events
-ms.date: 03/26/2026
+ms.date: 04/21/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GithubEvent
 ---
@@ -200,9 +200,6 @@ A GitHub event object.
 
 ## NOTES
 
-
-
 ## RELATED LINKS
 
-[https://docs.github.com/en/rest/activity/events](https://docs.github.com/en/rest/activity/events)
-
+- [https://docs.github.com/en/rest/activity/events](https://docs.github.com/en/rest/activity/events)

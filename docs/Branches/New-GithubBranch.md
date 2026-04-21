@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: Branches-Help.xml
 HelpUri: ''
 Locale: en-US
 Module Name: Branches
-ms.date: 03/26/2026
+ms.date: 04/21/2026
 PlatyPS schema version: 2024-05-01
 title: New-GithubBranch
 ---
@@ -166,9 +166,6 @@ A GitHub branch object.
 
 ## NOTES
 
-
-
 ## RELATED LINKS
 
-[https://docs.github.com/en/rest/git/refs#create-a-reference](https://docs.github.com/en/rest/git/refs#create-a-reference)
-
+- [https://docs.github.com/en/rest/git/refs#create-a-reference](https://docs.github.com/en/rest/git/refs#create-a-reference)

@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: Repositories-Help.xml
 HelpUri: ''
 Locale: en-US
 Module Name: Repositories
-ms.date: 03/26/2026
+ms.date: 04/21/2026
 PlatyPS schema version: 2024-05-01
 title: Remove-GithubRepository
 ---
@@ -123,9 +123,6 @@ Permanently deletes a GitHub repository. This action cannot be undone.
 
 ## NOTES
 
-
-
 ## RELATED LINKS
 
-[https://docs.github.com/en/rest/repos/repos#delete-a-repository](https://docs.github.com/en/rest/repos/repos#delete-a-repository)
-
+- [https://docs.github.com/en/rest/repos/repos#delete-a-repository](https://docs.github.com/en/rest/repos/repos#delete-a-repository)

@@ -1,45 +1,48 @@
-﻿---
+---
 document type: cmdlet
-external help file: Issues-Help.xml
+external help file: PullRequests-Help.xml
 HelpUri: ''
 Locale: en-US
-Module Name: Issues
+Module Name: PullRequests
 ms.date: 04/21/2026
 PlatyPS schema version: 2024-05-01
-title: Open-GithubIssue
+title: Get-GithubPullRequestReview
 ---
 
-# Open-GithubIssue
+# Get-GithubPullRequestReview
 
 ## SYNOPSIS
 
-Reopens a closed GitHub issue.
+{{ Fill in the Synopsis }}
 
 ## SYNTAX
 
 ### __AllParameterSets
 
 ```
-Open-GithubIssue [-IssueId] <int> [-RepositoryId <string>] [<CommonParameters>]
+Get-GithubPullRequestReview [-PullRequestId] <int> [-RepositoryId <string>] [<CommonParameters>]
 ```
 
 ## ALIASES
 
+This cmdlet has the following aliases,
+  {{Insert list of aliases}}
+
 ## DESCRIPTION
 
-Reopens a closed GitHub issue by setting its state to open.
+{{ Fill in the Description }}
 
 ## EXAMPLES
 
 ### Example 1
 
-Open-GithubIssue 42
+{{ Add example description here }}
 
 ## PARAMETERS
 
-### -IssueId
+### -PullRequestId
 
-The issue number.
+{{ Fill PullRequestId Description }}
 
 ```yaml
 Type: System.Int32
@@ -52,7 +55,7 @@ ParameterSets:
   Position: 0
   IsRequired: true
   ValueFromPipeline: false
-  ValueFromPipelineByPropertyName: false
+  ValueFromPipelineByPropertyName: true
   ValueFromRemainingArguments: false
 DontShow: false
 AcceptedValues: []
@@ -61,7 +64,7 @@ HelpMessage: ''
 
 ### -RepositoryId
 
-The owner/name of the GitHub repository (e.g. 'owner/repo'). Defaults to the current directory's repository.
+{{ Fill RepositoryId Description }}
 
 ```yaml
 Type: System.String
@@ -91,16 +94,23 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ### System.String
 
-A string value.
+{{ Fill in the Description }}
+
+### System.Int32
+
+{{ Fill in the Description }}
 
 ## OUTPUTS
 
-### Github.Issue
+### Github.Review
 
-A GitHub issue object.
+{{ Fill in the Description }}
 
 ## NOTES
 
+{{ Fill in the Notes }}
+
 ## RELATED LINKS
 
-- [https://docs.github.com/en/rest/issues/issues#update-an-issue](https://docs.github.com/en/rest/issues/issues#update-an-issue)
+{{ Fill in the related links here }}
+

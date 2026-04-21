@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: Members-Help.xml
 HelpUri: ''
 Locale: en-US
 Module Name: Members
-ms.date: 03/26/2026
+ms.date: 04/21/2026
 PlatyPS schema version: 2024-05-01
 title: Add-GithubOrganizationMember
 ---
@@ -119,9 +119,6 @@ A GitHub member/collaborator object.
 
 ## NOTES
 
-
-
 ## RELATED LINKS
 
-[https://docs.github.com/en/rest/orgs/members#set-organization-membership-for-a-user](https://docs.github.com/en/rest/orgs/members#set-organization-membership-for-a-user)
-
+- [https://docs.github.com/en/rest/orgs/members#set-organization-membership-for-a-user](https://docs.github.com/en/rest/orgs/members#set-organization-membership-for-a-user)

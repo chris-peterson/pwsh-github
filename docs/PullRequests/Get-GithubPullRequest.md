@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: PullRequests-Help.xml
 HelpUri: ''
 Locale: en-US
 Module Name: PullRequests
-ms.date: 03/26/2026
+ms.date: 04/21/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GithubPullRequest
 ---
@@ -21,15 +21,25 @@ Gets pull requests from a GitHub repository.
 
 ```
 Get-GithubPullRequest [[-PullRequestId] <int>] [-RepositoryId <string>] [-State <string>]
- [-Head <string>] [-Base <string>] [-Author <string>] [-IsDraft] [-Since <string>] [-Sort <string>]
- [-Direction <string>] [-MaxPages <uint>] [-All] [<CommonParameters>]
+ [-Head <string>] [-Base <string>] [-Author <string>] [-IsDraft] [-CreatedAfter <string>]
+ [-CreatedBefore <string>] [-MergedAfter <string>] [-MergedBefore <string>] [-ReviewedBy <string>]
+ [-Sort <string>] [-Direction <string>] [-MaxPages <uint>] [-All] [<CommonParameters>]
 ```
 
 ### Mine
 
 ```
-Get-GithubPullRequest -Mine [-State <string>] [-Head <string>] [-Base <string>] [-Author <string>]
- [-IsDraft] [-Since <string>] [-Sort <string>] [-Direction <string>] [-MaxPages <uint>] [-All]
+Get-GithubPullRequest -Mine [-State <string>] [-Author <string>] [-IsDraft] [-CreatedAfter <string>]
+ [-CreatedBefore <string>] [-MergedAfter <string>] [-MergedBefore <string>] [-ReviewedBy <string>]
+ [-Sort <string>] [-Direction <string>] [-MaxPages <uint>] [-All] [<CommonParameters>]
+```
+
+### Search
+
+```
+Get-GithubPullRequest -Search [-State <string>] [-Author <string>] [-IsDraft]
+ [-CreatedAfter <string>] [-CreatedBefore <string>] [-MergedAfter <string>] [-MergedBefore <string>]
+ [-ReviewedBy <string>] [-Sort <string>] [-Direction <string>] [-MaxPages <uint>] [-All]
  [<CommonParameters>]
 ```
 
@@ -101,6 +111,48 @@ DefaultValue: ''
 SupportsWildcards: false
 Aliases: []
 ParameterSets:
+- Name: ByRepo
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -CreatedAfter
+
+{{ Fill CreatedAfter Description }}
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -CreatedBefore
+
+{{ Fill CreatedBefore Description }}
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
 - Name: (All)
   Position: Named
   IsRequired: false
@@ -144,7 +196,7 @@ SupportsWildcards: false
 Aliases:
 - Branch
 ParameterSets:
-- Name: (All)
+- Name: ByRepo
   Position: Named
   IsRequired: false
   ValueFromPipeline: false
@@ -182,6 +234,48 @@ Maximum number of pages of results to return. Each page contains up to 30 items.
 
 ```yaml
 Type: System.UInt32
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -MergedAfter
+
+{{ Fill MergedAfter Description }}
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -MergedBefore
+
+{{ Fill MergedBefore Description }}
+
+```yaml
+Type: System.String
 DefaultValue: ''
 SupportsWildcards: false
 Aliases: []
@@ -255,6 +349,48 @@ ParameterSets:
   IsRequired: false
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: true
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -ReviewedBy
+
+{{ Fill ReviewedBy Description }}
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -Search
+
+{{ Fill Search Description }}
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Search
+  Position: Named
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
   ValueFromRemainingArguments: false
 DontShow: false
 AcceptedValues: []
@@ -349,9 +485,6 @@ A GitHub pull request object.
 
 ## NOTES
 
-
-
 ## RELATED LINKS
 
-[https://docs.github.com/en/rest/pulls/pulls](https://docs.github.com/en/rest/pulls/pulls)
-
+- [https://docs.github.com/en/rest/pulls/pulls](https://docs.github.com/en/rest/pulls/pulls)

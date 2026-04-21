@@ -55,6 +55,7 @@
   * [Close-GithubPullRequest](PullRequests/Close-GithubPullRequest.md)
   * [Get-GithubPullRequest](PullRequests/Get-GithubPullRequest.md)
   * [Get-GithubPullRequestComment](PullRequests/Get-GithubPullRequestComment.md)
+  * [Get-GithubPullRequestReview](PullRequests/Get-GithubPullRequestReview.md)
   * [Merge-GithubPullRequest](PullRequests/Merge-GithubPullRequest.md)
   * [New-GithubPullRequest](PullRequests/New-GithubPullRequest.md)
   * [New-GithubPullRequestComment](PullRequests/New-GithubPullRequestComment.md)

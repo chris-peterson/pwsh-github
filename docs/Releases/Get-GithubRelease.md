@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: Releases-Help.xml
 HelpUri: ''
 Locale: en-US
 Module Name: Releases
-ms.date: 03/26/2026
+ms.date: 04/21/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GithubRelease
 ---
@@ -266,9 +266,6 @@ A GitHub release object.
 
 ## NOTES
 
-
-
 ## RELATED LINKS
 
-[https://docs.github.com/en/rest/releases/releases](https://docs.github.com/en/rest/releases/releases)
-
+- [https://docs.github.com/en/rest/releases/releases](https://docs.github.com/en/rest/releases/releases)

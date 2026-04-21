@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: PullRequests-Help.xml
 HelpUri: ''
 Locale: en-US
 Module Name: PullRequests
-ms.date: 03/26/2026
+ms.date: 04/21/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GithubPullRequestComment
 ---
@@ -104,9 +104,6 @@ A GitHub comment object.
 
 ## NOTES
 
-
-
 ## RELATED LINKS
 
-[https://docs.github.com/en/rest/issues/comments#list-issue-comments](https://docs.github.com/en/rest/issues/comments#list-issue-comments)
-
+- [https://docs.github.com/en/rest/issues/comments#list-issue-comments](https://docs.github.com/en/rest/issues/comments#list-issue-comments)

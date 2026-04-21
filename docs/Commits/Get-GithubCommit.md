@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: Commits-Help.xml
 HelpUri: ''
 Locale: en-US
 Module Name: Commits
-ms.date: 03/26/2026
+ms.date: 04/21/2026
 PlatyPS schema version: 2024-05-01
 title: Get-GithubCommit
 ---
@@ -272,9 +272,6 @@ A GitHub commit object.
 
 ## NOTES
 
-
-
 ## RELATED LINKS
 
-[https://docs.github.com/en/rest/commits/commits](https://docs.github.com/en/rest/commits/commits)
-
+- [https://docs.github.com/en/rest/commits/commits](https://docs.github.com/en/rest/commits/commits)

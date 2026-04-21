@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: Comments-Help.xml
 HelpUri: ''
 Locale: en-US
 Module Name: Comments
-ms.date: 03/26/2026
+ms.date: 04/21/2026
 PlatyPS schema version: 2024-05-01
 title: New-GithubIssueComment
 ---
@@ -170,9 +170,6 @@ A GitHub comment object.
 
 ## NOTES
 
-
-
 ## RELATED LINKS
 
-[https://docs.github.com/en/rest/issues/comments#create-an-issue-comment](https://docs.github.com/en/rest/issues/comments#create-an-issue-comment)
-
+- [https://docs.github.com/en/rest/issues/comments#create-an-issue-comment](https://docs.github.com/en/rest/issues/comments#create-an-issue-comment)

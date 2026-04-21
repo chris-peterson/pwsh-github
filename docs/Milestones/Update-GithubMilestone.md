@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: Milestones-Help.xml
 HelpUri: ''
 Locale: en-US
 Module Name: Milestones
-ms.date: 03/26/2026
+ms.date: 04/21/2026
 PlatyPS schema version: 2024-05-01
 title: Update-GithubMilestone
 ---
@@ -231,9 +231,6 @@ A GitHub milestone object.
 
 ## NOTES
 
-
-
 ## RELATED LINKS
 
-[https://docs.github.com/en/rest/issues/milestones#update-a-milestone](https://docs.github.com/en/rest/issues/milestones#update-a-milestone)
-
+- [https://docs.github.com/en/rest/issues/milestones#update-a-milestone](https://docs.github.com/en/rest/issues/milestones#update-a-milestone)

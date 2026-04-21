@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: Utilities-Help.xml
 HelpUri: ''
 Locale: en-US
 Module Name: Utilities
-ms.date: 03/26/2026
+ms.date: 04/21/2026
 PlatyPS schema version: 2024-05-01
 title: Invoke-GithubApi
 ---
@@ -182,9 +182,6 @@ Sends an authenticated request to the GitHub REST API. Handles authentication, p
 
 ## NOTES
 
-
-
 ## RELATED LINKS
 
-[https://docs.github.com/en/rest](https://docs.github.com/en/rest)
-
+- [https://docs.github.com/en/rest](https://docs.github.com/en/rest)
