@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '0.8.0'
+    ModuleVersion = '0.9.0'
 
     PrivateData = @{
         PSData = @{
@@ -20,11 +20,13 @@
             )
             ReleaseNotes =
 @'
-## 0.8.0
+## 0.9.0
+
+### Breaking Changes
+* `Get-GithubPullRequest` parameters `-Since` / `-Until` are renamed to `-CreatedAfter` / `-CreatedBefore`. No aliases — update call sites directly.
 
 ### Features
-* Issue and pull request authors now display as full names instead of login handles, matching GitLab behavior and fixing downstream team mapping
-* User name lookups are cached to disk, so repeated sessions avoid redundant API calls
+* `Get-GithubPullRequest` gains `-MergedAfter` / `-MergedBefore` for filtering by merge date (independent of `-State`), unlocking accurate year-to-date delivery queries that were previously impossible.
 '@
         }
     }
