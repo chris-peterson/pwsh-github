@@ -1,4 +1,4 @@
----
+﻿---
 document type: cmdlet
 external help file: PullRequests-Help.xml
 HelpUri: ''
@@ -24,9 +24,6 @@ Get-GithubPullRequestReview [-PullRequestId] <int> [-RepositoryId <string>] [<Co
 ```
 
 ## ALIASES
-
-This cmdlet has the following aliases,
-  {{Insert list of aliases}}
 
 ## DESCRIPTION
 

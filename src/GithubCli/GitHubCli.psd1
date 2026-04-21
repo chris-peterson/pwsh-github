@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '0.9.0'
+    ModuleVersion = '0.9.1'
 
     PrivateData = @{
         PSData = @{
@@ -20,13 +20,10 @@
             )
             ReleaseNotes =
 @'
-## 0.9.0
+## 0.9.1
 
-### Breaking Changes
-* `Get-GithubPullRequest` parameters `-Since` / `-Until` are renamed to `-CreatedAfter` / `-CreatedBefore`. No aliases; update call sites directly.
-
-### Features
-* `Get-GithubPullRequest` gains `-MergedAfter` / `-MergedBefore` for filtering by merge date (independent of `-State`), unlocking accurate year-to-date delivery queries that were previously impossible.
+### Fixes
+* `Get-GithubPullRequest` date-range filtering now emits `merged:X..Y` / `created:X..Y` range syntax when both bounds are supplied. Previously emitted two qualifiers (`merged:>=X merged:<=Y`), which GitHub silently collapsed to only the last one, returning all-time history instead of the requested range.
 '@
         }
     }

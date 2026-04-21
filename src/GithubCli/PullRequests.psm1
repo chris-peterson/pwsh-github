@@ -1,3 +1,14 @@
+# GitHub's search parser accepts only one qualifier per name: passing both
+# `merged:>=X merged:<=Y` silently drops the first. Use range syntax
+# `merged:X..Y` when both bounds are given, single inequality otherwise.
+function script:Add-GithubDateQualifier {
+    param([string]$Query, [string]$Name, [string]$After, [string]$Before)
+    if ($After -and $Before) { return "$Query $Name`:$After..$Before" }
+    if ($After)              { return "$Query $Name`:>=$After" }
+    if ($Before)             { return "$Query $Name`:<=$Before" }
+    return $Query
+}
+
 function Get-GithubPullRequest {
     [CmdletBinding(DefaultParameterSetName='ByRepo')]
     [OutputType('Github.PullRequest')]
@@ -104,10 +115,8 @@ function Get-GithubPullRequest {
                 if ($State -and $State -ne 'all') { $SearchQuery += " is:$State" }
                 if ($Author)        { $SearchQuery += " author:$Author" }
                 if ($IsDraft)       { $SearchQuery += " draft:true" }
-                if ($CreatedAfter)  { $SearchQuery += " created:>=$CreatedAfter" }
-                if ($CreatedBefore) { $SearchQuery += " created:<=$CreatedBefore" }
-                if ($MergedAfter)   { $SearchQuery += " merged:>=$MergedAfter" }
-                if ($MergedBefore)  { $SearchQuery += " merged:<=$MergedBefore" }
+                $SearchQuery = Add-GithubDateQualifier $SearchQuery 'created' $CreatedAfter $CreatedBefore
+                $SearchQuery = Add-GithubDateQualifier $SearchQuery 'merged'  $MergedAfter  $MergedBefore
                 if ($ReviewedBy)    { $SearchQuery += " reviewed-by:$ReviewedBy" }
                 if ($Head)       { $SearchQuery += " head:$Head" }
                 if ($Base)       { $SearchQuery += " base:$Base" }
@@ -129,10 +138,8 @@ function Get-GithubPullRequest {
                 $SearchQuery += " is:$State"
             }
             if ($IsDraft)       { $SearchQuery += " draft:true" }
-            if ($CreatedAfter)  { $SearchQuery += " created:>=$CreatedAfter" }
-            if ($CreatedBefore) { $SearchQuery += " created:<=$CreatedBefore" }
-            if ($MergedAfter)   { $SearchQuery += " merged:>=$MergedAfter" }
-            if ($MergedBefore)  { $SearchQuery += " merged:<=$MergedBefore" }
+            $SearchQuery = Add-GithubDateQualifier $SearchQuery 'created' $CreatedAfter $CreatedBefore
+            $SearchQuery = Add-GithubDateQualifier $SearchQuery 'merged'  $MergedAfter  $MergedBefore
             if ($ReviewedBy)    { $SearchQuery += " reviewed-by:$ReviewedBy" }
             $Result = Invoke-GithubApi GET "search/issues" @{ q = $SearchQuery } -MaxPages $MaxPages |
                 Select-Object -ExpandProperty items
@@ -143,10 +150,8 @@ function Get-GithubPullRequest {
             if ($State -and $State -ne 'all') { $SearchQuery += " is:$State" }
             if ($Author)        { $SearchQuery += " author:$Author" }
             if ($IsDraft)       { $SearchQuery += " draft:true" }
-            if ($CreatedAfter)  { $SearchQuery += " created:>=$CreatedAfter" }
-            if ($CreatedBefore) { $SearchQuery += " created:<=$CreatedBefore" }
-            if ($MergedAfter)   { $SearchQuery += " merged:>=$MergedAfter" }
-            if ($MergedBefore)  { $SearchQuery += " merged:<=$MergedBefore" }
+            $SearchQuery = Add-GithubDateQualifier $SearchQuery 'created' $CreatedAfter $CreatedBefore
+            $SearchQuery = Add-GithubDateQualifier $SearchQuery 'merged'  $MergedAfter  $MergedBefore
             if ($ReviewedBy)    { $SearchQuery += " reviewed-by:$ReviewedBy" }
             $SearchParams = @{ q = $SearchQuery }
             if ($Sort)      { $SearchParams.sort  = $Sort }
