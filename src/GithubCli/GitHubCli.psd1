@@ -23,7 +23,7 @@
 ## 0.9.0
 
 ### Breaking Changes
-* `Get-GithubPullRequest` parameters `-Since` / `-Until` are renamed to `-CreatedAfter` / `-CreatedBefore`. No aliases — update call sites directly.
+* `Get-GithubPullRequest` parameters `-Since` / `-Until` are renamed to `-CreatedAfter` / `-CreatedBefore`. No aliases; update call sites directly.
 
 ### Features
 * `Get-GithubPullRequest` gains `-MergedAfter` / `-MergedBefore` for filtering by merge date (independent of `-State`), unlocking accurate year-to-date delivery queries that were previously impossible.
