@@ -111,6 +111,14 @@
         <Name>ProjectPath</Name>
         <GetScriptBlock>$this.HtmlUrl -match '://[^/]+/(?&lt;ProjectPath&gt;[^/]+/[^/]+)/' | Out-Null; $Matches.ProjectPath</GetScriptBlock>
       </ScriptProperty>
+      <ScriptProperty>
+        <Name>SourceBranch</Name>
+        <GetScriptBlock>if ($this.Head) { return $this.Head.Ref }; (Resolve-GithubPullRequestDetail $this).Head.Ref</GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
+        <Name>TargetBranch</Name>
+        <GetScriptBlock>if ($this.Base) { return $this.Base.Ref }; (Resolve-GithubPullRequestDetail $this).Base.Ref</GetScriptBlock>
+      </ScriptProperty>
     </Members>
   </Type>
   <Type>
