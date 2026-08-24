@@ -4,7 +4,7 @@ BeforeAll {
     # The manifest is what wires the type data to the resolver: TypesToProcess
     # supplies the getters, ScriptsToProcess puts the resolver in the caller's
     # session state so any scope reading the property can reach it.
-    Import-Module $PSScriptRoot/../src/GithubCli/GithubCli.psd1 -Force
+    Import-Module $PSScriptRoot/../src/GithubCli/GitHubCli.psd1 -Force
 
     function New-SearchShapePullRequest {
         param($Number = 7, $RepositoryId = 'owner/repo')

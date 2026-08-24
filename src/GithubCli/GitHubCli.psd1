@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '0.9.1'
+    ModuleVersion = '0.10.0'
 
     PrivateData = @{
         PSData = @{
@@ -20,10 +20,10 @@
             )
             ReleaseNotes =
 @'
-## 0.9.1
+## 0.10.0
 
-### Fixes
-* `Get-GithubPullRequest` date-range filtering now emits `merged:X..Y` / `created:X..Y` range syntax when both bounds are supplied. Previously emitted two qualifiers (`merged:>=X merged:<=Y`), which GitHub silently collapsed to only the last one, returning all-time history instead of the requested range.
+### Features
+* https://github.com/chris-peterson/pwsh-github/pull/3
 '@
         }
     }
