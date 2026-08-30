@@ -1,21 +1,22 @@
 # Backlog
 
+API resources not yet wrapped. Work that is ready to start moves to an issue and comes off this list.
+
 | Milestone | API Resource | Docs | Proposed Cmdlets |
 |-----------|-------------|------|-----------------|
-| 1 | Pull Request Reviews | [docs](https://docs.github.com/en/rest/pulls/reviews) | `Get-GithubPullRequestReview`, `New-GithubPullRequestReview` |
+| 1 | Pull Request Reviews | [docs](https://docs.github.com/en/rest/pulls/reviews) | `New-GithubPullRequestReview` (`Get-` already ships) |
 | 1 | Pull Request Files | [docs](https://docs.github.com/en/rest/pulls/files) | `Get-GithubPullRequestFile` |
 | 1 | Releases | [docs](https://docs.github.com/en/rest/releases/releases) | `New-GithubRelease`, `Update-GithubRelease`, `Remove-GithubRelease` |
 | 1 | Release Assets | [docs](https://docs.github.com/en/rest/releases/assets) | `Get-GithubReleaseAsset`, `New-GithubReleaseAsset`, `Remove-GithubReleaseAsset` |
 | 1 | Branch Protection | [docs](https://docs.github.com/en/rest/branches/branch-protection) | `Get-GithubBranchProtection`, `Set-GithubBranchProtection`, `Remove-GithubBranchProtection` |
 | 1 | Teams | [docs](https://docs.github.com/en/rest/teams/teams) | `Get-GithubTeam`, `New-GithubTeam`, `Update-GithubTeam`, `Remove-GithubTeam` |
 | 1 | Team Members | [docs](https://docs.github.com/en/rest/teams/members) | `Get-GithubTeamMember`, `Add-GithubTeamMember`, `Remove-GithubTeamMember` |
-| 2 | Workflow Runs | [docs](https://docs.github.com/en/rest/actions/workflow-runs) | `Stop-GithubWorkflowRun`, `Restart-GithubWorkflowRun`, `Remove-GithubWorkflowRun` |
-| 2 | Artifacts | [docs](https://docs.github.com/en/rest/actions/artifacts) | `Get-GithubArtifact`, `Save-GithubArtifact`, `Remove-GithubArtifact` |
+| 2 | Artifacts | [docs](https://docs.github.com/en/rest/actions/artifacts) | `Remove-GithubArtifact` (`Get-` and `Save-` tracked by #8) |
 | 2 | Actions Secrets | [docs](https://docs.github.com/en/rest/actions/secrets) | `Get-GithubActionSecret`, `Set-GithubActionSecret`, `Remove-GithubActionSecret` |
 | 2 | Actions Variables | [docs](https://docs.github.com/en/rest/actions/variables) | `Get-GithubActionVariable`, `Set-GithubActionVariable`, `Remove-GithubActionVariable` |
 | 2 | Commit Comparison | [docs](https://docs.github.com/en/rest/commits/commits) | `Compare-GithubCommit` |
 | 2 | Commit Statuses | [docs](https://docs.github.com/en/rest/commits/statuses) | `Get-GithubCommitStatus`, `New-GithubCommitStatus` |
-| 2 | Forks | [docs](https://docs.github.com/en/rest/repos/forks) | `Get-GithubFork`, `New-GithubFork` |
+| 2 | Forks | [docs](https://docs.github.com/en/rest/repos/forks) | `Get-GithubFork` (creation tracked by #5) |
 | 2 | Repository Topics | [docs](https://docs.github.com/en/rest/repos/repos) | `Get-GithubRepositoryTopic`, `Set-GithubRepositoryTopic` |
 | 2 | Repository Contents | [docs](https://docs.github.com/en/rest/repos/contents) | `Get-GithubContent` |
 | 2 | Notifications | [docs](https://docs.github.com/en/rest/activity/notifications) | `Get-GithubNotification`, `Set-GithubNotification` |
@@ -68,6 +69,6 @@
 | Milestone | Theme | Description |
 |-----------|-------|-------------|
 | 1 | Core Collaboration | PR reviews & files, release lifecycle, branch protection, teams & team membership |
-| 2 | CI/CD & Workflow | Workflow run control, artifacts, secrets, variables, commit comparison & statuses, forks, topics, contents, notifications, rate limits, issue assignees, review requests |
+| 2 | CI/CD & Workflow | Artifact cleanup, secrets, variables, commit comparison & statuses, fork listing, topics, contents, notifications, rate limits, issue assignees, review requests |
 | 3 | Extended Platform | Gists, starring, watching, reactions, webhooks, traffic, deploy keys, licenses, deployments, environments, org hooks & invitations, SSH keys, runners, caches, permissions, commit comments, checks, git database, meta, feeds |
 | 4 | Security & Admin | Code scanning, Dependabot, secret scanning, security advisories, dependency graph, packages, Pages, billing, rulesets, code security, autolinks, apps, Codespaces, migrations, SCIM, Copilot |
