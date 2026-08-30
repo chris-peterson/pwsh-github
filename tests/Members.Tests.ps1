@@ -260,3 +260,28 @@ Describe 'Remove-GithubRepositoryCollaborator' {
         Should -Invoke Invoke-GithubApi -ModuleName Members -Times 0
     }
 }
+
+Describe 'Set-GithubRepositoryCollaborator' {
+    BeforeEach {
+        Mock Resolve-GithubRepository { 'owner/repo' } -ModuleName Members
+        Mock Invoke-GithubApi {
+            [PSCustomObject]@{ id = 1; login = 'existing-collab'; permissions = @{ admin = $true } }
+        } -ModuleName Members
+    }
+
+    It 'Should resolve to Add-GithubRepositoryCollaborator' {
+        $Alias = Get-Command Set-GithubRepositoryCollaborator
+        $Alias.CommandType | Should -Be 'Alias'
+        $Alias.ResolvedCommand.Name | Should -Be 'Add-GithubRepositoryCollaborator'
+    }
+
+    It 'Should change an existing collaborator permission' {
+        Set-GithubRepositoryCollaborator -RepositoryId 'owner/repo' -Username 'existing-collab' -Permission admin
+
+        Should -Invoke Invoke-GithubApi -ModuleName Members -ParameterFilter {
+            $HttpMethod -eq 'PUT' -and
+            $Path -eq 'repos/owner/repo/collaborators/existing-collab' -and
+            $Body.permission -eq 'admin'
+        }
+    }
+}

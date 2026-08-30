@@ -161,6 +161,7 @@ function Get-GithubRepositoryCollaborator {
 
 function Add-GithubRepositoryCollaborator {
     [CmdletBinding()]
+    [Alias('Set-GithubRepositoryCollaborator')]
     [OutputType('Github.Member')]
     param(
         [Parameter(ValueFromPipelineByPropertyName)]

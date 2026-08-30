@@ -155,5 +155,8 @@
         'Get-GithubWorkflowRunLog'
         'Start-GithubWorkflowRun'
     )
-    AliasesToExport = @()
+    AliasesToExport = @(
+        # Members
+        'Set-GithubRepositoryCollaborator'
+    )
 }

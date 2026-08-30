@@ -4,7 +4,7 @@ external help file: Members-Help.xml
 HelpUri: ''
 Locale: en-US
 Module Name: Members
-ms.date: 04/21/2026
+ms.date: 08/30/2026
 PlatyPS schema version: 2024-05-01
 title: Add-GithubRepositoryCollaborator
 ---
@@ -13,7 +13,7 @@ title: Add-GithubRepositoryCollaborator
 
 ## SYNOPSIS
 
-Adds a collaborator to a GitHub repository.
+Grants a user access to a GitHub repository, or changes the access they already have.
 
 ## SYNTAX
 
@@ -26,15 +26,26 @@ Add-GithubRepositoryCollaborator [-Username] <string> [-RepositoryId <string>]
 
 ## ALIASES
 
+Set-GithubRepositoryCollaborator
+
 ## DESCRIPTION
 
-Adds a user as a collaborator to a GitHub repository with the specified permission level.
+Grants a user the specified permission on a GitHub repository. The underlying endpoint is an upsert,
+so the same call adds a user who is not yet a collaborator and changes the permission of one who already is.
+`Set-GithubRepositoryCollaborator` is an alias for exactly this behavior.
+
+Lowering someone's access is a call with a narrower `-Permission`, not a removal:
+`Remove-GithubRepositoryCollaborator` revokes access outright.
 
 ## EXAMPLES
 
 ### Example 1
 
 Add-GithubRepositoryCollaborator 'octocat' -Permission push
+
+### Example 2
+
+Set-GithubRepositoryCollaborator 'octocat' -Permission admin
 
 ## PARAMETERS
 
