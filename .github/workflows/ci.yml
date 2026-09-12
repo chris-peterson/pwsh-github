@@ -4,6 +4,8 @@ on:
   push:
     branches: [ '*' ]
   pull_request:
+  release:
+    types: [ published ]
   workflow_dispatch:
     inputs:
       force_publish_docs:
@@ -136,7 +138,6 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       changes_in_docs: ${{ steps.changes.outputs.docs }}
-      changes_in_src: ${{ steps.changes.outputs.src }}
     steps:
       - uses: actions/checkout@v6
       - name: Detect changes
@@ -146,26 +147,67 @@ jobs:
           filters: |
             docs:
               - 'docs/**'
-            src:
-              - 'src/**'
       - run: echo "All checks passed, proceeding with deployment"
 
-  publish-module:
-    name: Publish Module
-    needs: release-gate
-    if: needs.release-gate.outputs.changes_in_src == 'true'
+  release:
+    name: Release
+    needs: [test, security]
+    if: github.event.repository.fork == false && github.event_name == 'release'
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
     environment:
       name: PowerShell Gallery
       url: https://www.powershellgallery.com/packages/GithubCli
 
+    env:
+      VERSION: ${{ github.event.release.tag_name }}
+
     steps:
       - uses: actions/checkout@v6
+        with:
+          ref: main
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install PlatyPS
+        shell: pwsh
+        run: |
+          Set-PSRepository PSGallery -InstallationPolicy Trusted
+          Install-Module -Name Microsoft.PowerShell.PlatyPS -Force -Scope CurrentUser
+
+      - name: Promote the changelog's Unreleased section into this version
+        shell: pwsh
+        run: ./build/Update-ReleaseArtifacts.ps1 -Version $env:VERSION -NotesOutputPath "$env:RUNNER_TEMP/release-notes.md"
+
+      - name: Export MAML help
+        shell: pwsh
+        run: ./docs/.support/scripts/Export-Help.ps1
 
       - name: Publish PowerShell Module
         uses: chris-peterson/publish-powershell@v1
         with:
           ApiKey: ${{ secrets.PSGALLERY_API_KEY }}
+
+      - name: Set the release body to the promoted notes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release edit "${VERSION}" --notes-file "${RUNNER_TEMP}/release-notes.md"
+
+      # Last, so a failed publish leaves main without a commit claiming a
+      # release that never shipped.
+      - name: Commit version bump and changelog to main
+        run: |
+          git config user.name  'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src/GithubCli/GitHubCli.psd1 CHANGELOG.md
+          if git diff --cached --quiet; then
+            echo "No manifest or changelog changes to commit"
+          else
+            git commit -m "Release ${VERSION}"
+            git push origin main
+          fi
 
   publish-docs:
     name: Publish Documentation
