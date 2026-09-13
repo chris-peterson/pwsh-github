@@ -12,11 +12,12 @@ $DocsFolder = Join-Path $ScriptDir '../..'
 $ModulePath = Join-Path $ScriptDir '../../../src/GithubCli'
 $RepoRoot   = Resolve-Path (Join-Path $ScriptDir '../../..')
 
-# Remove existing help XML to avoid duplicate documentation
-$HelpXmlPath = Join-Path $ModulePath 'en-US/GithubCli-Help.xml'
-if (Test-Path $HelpXmlPath) {
-    Remove-Item $HelpXmlPath -Force
-    Write-Host "Removed existing help XML file" -ForegroundColor Cyan
+# Remove existing help XML to avoid duplicate documentation. Each nested module
+# declares its own `external help file`, so the export writes one XML per module.
+$HelpXmlFiles = @(Get-ChildItem -Path (Join-Path $ModulePath 'en-US') -Filter '*-Help.xml' -ErrorAction SilentlyContinue)
+if ($HelpXmlFiles) {
+    $HelpXmlFiles | Remove-Item -Force
+    Write-Host "Removed $($HelpXmlFiles.Count) existing help XML file(s)" -ForegroundColor Cyan
 }
 
 Import-Module Microsoft.PowerShell.PlatyPS
