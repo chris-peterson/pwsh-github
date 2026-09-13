@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '0.10.0'
+    ModuleVersion = '0.11.0'
 
     PrivateData = @{
         PSData = @{
@@ -20,10 +20,11 @@
             )
             ReleaseNotes =
 @'
-## 0.10.0
-
 ### Features
-* https://github.com/chris-peterson/pwsh-github/pull/3
+- `Set-GithubRepositoryCollaborator` aliases the collaborator upsert, so granting and changing access read the same: https://github.com/chris-peterson/pwsh-github/pull/9
+
+### Bug Fixes
+- Paged requests keep their authorization past the first page. Anything using `-All` over more than one page of results could come back truncated or fail with a 401: https://github.com/chris-peterson/pwsh-github/pull/11
 '@
         }
     }
