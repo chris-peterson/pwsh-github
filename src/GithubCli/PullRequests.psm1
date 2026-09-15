@@ -161,11 +161,16 @@ function Get-GithubPullRequest {
         }
     }
 
-    $PullRequests = $Result | New-GithubObject 'Github.PullRequest'
-    if ($Repo) {
-        $PullRequests | Add-Member -NotePropertyMembers @{ RepositoryId = $Repo } -PassThru
-    } else {
-        $PullRequests
+    foreach ($Item in $Result) {
+        $PullRequest = $Item | New-GithubObject 'Github.PullRequest'
+        # -Mine and -Search span repositories, so each result names its own rather
+        # than taking the one the caller happens to be standing in.
+        $ItemRepo = $Repo ? $Repo : (ConvertTo-GithubRepositoryId $Item.repository_url)
+        if ($ItemRepo) {
+            $PullRequest | Add-Member -NotePropertyMembers @{ RepositoryId = $ItemRepo } -PassThru
+        } else {
+            $PullRequest
+        }
     }
 }
 

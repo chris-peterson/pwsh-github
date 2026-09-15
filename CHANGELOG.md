@@ -4,6 +4,10 @@ All notable changes to GithubCli are recorded here, newest first.
 
 ## [Unreleased]
 
+### Bug Fixes
+- Every result of a cross-repo listing names the repository it came from. `Get-GithubPullRequest -Mine`/`-Search` and `Get-GithubIssue -Mine`/`-Organization` left `RepositoryId` unset, so branch refs and any piped follow-up call aimed at whatever repository the current directory pointed at: https://github.com/chris-peterson/pwsh-github/issues/4
+- `ProjectPath` is empty for an object whose url doesn't carry one, instead of reporting the last path the caller happened to match.
+
 ## [0.11.0] - 2026-09-13
 
 ### Features

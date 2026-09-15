@@ -77,11 +77,42 @@ Describe 'Pull request branch refs' {
         }
     }
 
+    It 'Should resolve a cross-repo result set against each repository in it' {
+        $Prs = @(
+            New-SearchShapePullRequest -Number 3533 -RepositoryId 'AzureAD/identitymodel'
+            New-SearchShapePullRequest -Number 157  -RepositoryId 'chris-peterson/pwsh-gitlab'
+        )
+
+        $null = $Prs | ForEach-Object { $_.SourceBranch }
+
+        Should -Invoke Invoke-GithubApi -Times 1 -Exactly -ParameterFilter {
+            $Path -eq 'repos/AzureAD/identitymodel/pulls/3533'
+        }
+        Should -Invoke Invoke-GithubApi -Times 1 -Exactly -ParameterFilter {
+            $Path -eq 'repos/chris-peterson/pwsh-gitlab/pulls/157'
+        }
+    }
+
     It 'Should stay null rather than throw when there is nothing to resolve from' {
         $Pr = [PSCustomObject]@{ PSTypeName = 'Github.PullRequest'; Number = 7 }
 
         $Pr.SourceBranch | Should -BeNullOrEmpty
         $Pr.TargetBranch | Should -BeNullOrEmpty
+        Should -Invoke Invoke-GithubApi -Times 0 -Exactly
+    }
+
+    It 'Should stay null rather than adopt a repository the caller matched earlier' {
+        # $Matches resolves up the scope chain, so a getter that reads it after a
+        # failed match reports whatever the caller matched last. A mixed-provider
+        # caller reaches a Github.PullRequest holding a GitLab path -- a repository
+        # the pull request could never belong to.
+        'https://gitlab.example.com/group/team/project/-/merge_requests/9' -match '://[^/]+/(?<ProjectPath>.+?)/-/' | Out-Null
+        $Matches.ProjectPath | Should -Be 'group/team/project'
+
+        $Pr = [PSCustomObject]@{ PSTypeName = 'Github.PullRequest'; Number = 7 }
+
+        $Pr.ProjectPath | Should -BeNullOrEmpty
+        $Pr.SourceBranch | Should -BeNullOrEmpty
         Should -Invoke Invoke-GithubApi -Times 0 -Exactly
     }
 

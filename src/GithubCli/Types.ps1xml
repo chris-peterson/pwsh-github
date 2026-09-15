@@ -65,7 +65,7 @@
       </ScriptProperty>
       <ScriptProperty>
         <Name>ProjectPath</Name>
-        <GetScriptBlock>$this.HtmlUrl -match '://[^/]+/(?&lt;ProjectPath&gt;[^/]+/[^/]+)/' | Out-Null; $Matches.ProjectPath</GetScriptBlock>
+        <GetScriptBlock>$Match = [regex]::Match([string] $this.HtmlUrl, '://[^/]+/(?&lt;ProjectPath&gt;[^/]+/[^/]+)'); if ($Match.Success) { $Match.Groups['ProjectPath'].Value }</GetScriptBlock>
       </ScriptProperty>
     </Members>
   </Type>
@@ -109,7 +109,7 @@
       </ScriptProperty>
       <ScriptProperty>
         <Name>ProjectPath</Name>
-        <GetScriptBlock>$this.HtmlUrl -match '://[^/]+/(?&lt;ProjectPath&gt;[^/]+/[^/]+)/' | Out-Null; $Matches.ProjectPath</GetScriptBlock>
+        <GetScriptBlock>$Match = [regex]::Match([string] $this.HtmlUrl, '://[^/]+/(?&lt;ProjectPath&gt;[^/]+/[^/]+)'); if ($Match.Success) { $Match.Groups['ProjectPath'].Value }</GetScriptBlock>
       </ScriptProperty>
       <ScriptProperty>
         <Name>SourceBranch</Name>

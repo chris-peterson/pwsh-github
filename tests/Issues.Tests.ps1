@@ -5,13 +5,15 @@ BeforeAll {
     . $PSScriptRoot/../src/GithubCli/Private/Functions/ObjectHelpers.ps1
     . $PSScriptRoot/../src/GithubCli/Private/Functions/PaginationHelpers.ps1
     . $PSScriptRoot/../src/GithubCli/Private/Functions/GitHelpers.ps1
+    . $PSScriptRoot/../src/GithubCli/Private/Functions/RepositoryHelpers.ps1
     . $PSScriptRoot/../src/GithubCli/Private/Globals.ps1
 
     $global:_IssueTestHelpers = @(
         'ConvertTo-PascalCase', 'ConvertTo-SnakeCase', 'ConvertTo-UrlEncoded',
         'New-GithubObject', 'Add-CoalescedProperty',
         'Resolve-GithubMaxPages',
-        'Resolve-GithubRepository', 'Get-GithubRemoteContext'
+        'Resolve-GithubRepository', 'Get-GithubRemoteContext',
+        'ConvertTo-GithubRepositoryId'
     )
     foreach ($fn in $global:_IssueTestHelpers) {
         $item = Get-Item "function:$fn" -ErrorAction SilentlyContinue
@@ -169,6 +171,39 @@ Describe "Open-GithubIssue" {
             $Path -eq 'repos/owner/repo/issues/10' -and
             $Body.state -eq 'open'
         }
+    }
+}
+
+Describe "Get-GithubIssue" {
+    BeforeEach {
+        Mock -ModuleName Issues Resolve-GithubRepository { 'cwd-owner/cwd-repo' }
+        Mock -ModuleName Issues Invoke-GithubApi {
+            @(
+                [PSCustomObject]@{
+                    number         = 42
+                    repository_url = 'https://api.github.com/repos/AzureAD/identitymodel'
+                    html_url       = 'https://github.com/AzureAD/identitymodel/issues/42'
+                }
+                [PSCustomObject]@{
+                    number         = 8
+                    repository_url = 'https://api.github.com/repos/chris-peterson/pwsh-gitlab'
+                    html_url       = 'https://github.com/chris-peterson/pwsh-gitlab/issues/8'
+                }
+            )
+        }
+    }
+
+    It "Should give each cross-repo result the repository it came from" {
+        $Result = Get-GithubIssue -Mine
+
+        $Result[0].RepositoryId | Should -Be 'AzureAD/identitymodel'
+        $Result[1].RepositoryId | Should -Be 'chris-peterson/pwsh-gitlab'
+    }
+
+    It "Should name an organization-wide result without consulting the working directory" {
+        $null = Get-GithubIssue -Organization 'my-org'
+
+        Should -Invoke -ModuleName Issues Resolve-GithubRepository -Times 0 -Exactly
     }
 }
 
