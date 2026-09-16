@@ -47,7 +47,17 @@ function Search-Github {
     $ObjectType = $TypeMap[$Scope]
 
     $Result = Invoke-GithubApi GET "search/$Scope" $ApiQuery -MaxPages $MaxPages
-    $Result.items | New-GithubObject $ObjectType
+    foreach ($Item in $Result.items) {
+        $Object = $Item | New-GithubObject $ObjectType
+        # A search spans repositories, so each result names its own rather than
+        # leaving a piped follow-up call to fall back on the working directory.
+        $ItemRepo = ConvertTo-GithubRepositoryId $Item.repository_url
+        if ($ItemRepo) {
+            $Object | Add-Member -NotePropertyMembers @{ RepositoryId = $ItemRepo } -PassThru
+        } else {
+            $Object
+        }
+    }
 }
 
 function Search-GithubRepository {

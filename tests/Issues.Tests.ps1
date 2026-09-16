@@ -205,6 +205,13 @@ Describe "Get-GithubIssue" {
 
         Should -Invoke -ModuleName Issues Resolve-GithubRepository -Times 0 -Exactly
     }
+
+    It "Should keep stamping the one repository a repo-scoped query names" {
+        $Result = Get-GithubIssue -RepositoryId 'owner/repo'
+
+        $Result[0].RepositoryId | Should -Be 'cwd-owner/cwd-repo'
+        $Result[1].RepositoryId | Should -Be 'cwd-owner/cwd-repo'
+    }
 }
 
 Describe "Get-GithubIssueComment" {

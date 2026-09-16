@@ -266,7 +266,12 @@ Describe 'Get-GithubPullRequest' {
 
     It 'Should keep stamping the one repository a repo-scoped query names' {
         Mock Invoke-GithubApi -ModuleName PullRequests -MockWith {
-            @([PSCustomObject]@{ number = 1; head = @{ ref = 'feature' }; base = @{ ref = 'main' } })
+            @([PSCustomObject]@{
+                number         = 1
+                head           = @{ ref = 'feature' }
+                base           = @{ ref = 'main' }
+                repository_url = 'https://api.github.com/repos/other-owner/other-repo'
+            })
         }
 
         $Result = Get-GithubPullRequest -RepositoryId 'owner/repo'

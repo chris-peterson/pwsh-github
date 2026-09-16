@@ -100,6 +100,10 @@ function Get-GithubPullRequest {
     if ($Sort)      { $Query.sort      = $Sort }
     if ($Direction) { $Query.direction = $Direction }
 
+    # Only ByRepo assigns this; declared so the emit loop below can't resolve a
+    # $Repo from global scope and stamp that on every cross-repo result.
+    $Repo = $null
+
     switch ($PSCmdlet.ParameterSetName) {
         'ByRepo' {
             $Repo = Resolve-GithubRepository $RepositoryId
