@@ -5,7 +5,10 @@ BeforeAll {
     . $PSScriptRoot/../src/GithubCli/Private/Functions/ObjectHelpers.ps1
     . $PSScriptRoot/../src/GithubCli/Private/Functions/PaginationHelpers.ps1
     . $PSScriptRoot/../src/GithubCli/Private/Functions/GitHelpers.ps1
+    . $PSScriptRoot/../src/GithubCli/Private/Functions/RepositoryHelpers.ps1
     . $PSScriptRoot/../src/GithubCli/Private/Globals.ps1
+
+    Set-Item function:global:ConvertTo-GithubRepositoryId (Get-Item function:ConvertTo-GithubRepositoryId).ScriptBlock
 
     function global:Invoke-GithubApi { param($HttpMethod, $Path, [hashtable]$Query, [hashtable]$Body, $MaxPages, $Accept) }
     function global:Resolve-GithubRepository { param($Repository) }
@@ -36,6 +39,7 @@ AfterAll {
     Remove-Item function:Resolve-GithubRepository -ErrorAction SilentlyContinue
     Remove-Item function:Resolve-GithubMaxPages -ErrorAction SilentlyContinue
     Remove-Item function:New-GithubObject -ErrorAction SilentlyContinue
+    Remove-Item function:ConvertTo-GithubRepositoryId -ErrorAction SilentlyContinue
 }
 
 Describe 'New-GithubPullRequest' {
@@ -222,6 +226,57 @@ Describe 'Close-GithubPullRequest' {
             $Path -eq 'repos/owner/repo/pulls/42' -and
             $Body.state -eq 'closed'
         }
+    }
+}
+
+Describe 'Get-GithubPullRequest' {
+    BeforeEach {
+        Mock Resolve-GithubRepository { 'cwd-owner/cwd-repo' } -ModuleName PullRequests
+        Mock Invoke-GithubApi -ModuleName PullRequests -MockWith {
+            if ($Path -eq 'user') { return [PSCustomObject]@{ login = 'me' } }
+            [PSCustomObject]@{
+                items = @(
+                    [PSCustomObject]@{
+                        number         = 3533
+                        repository_url = 'https://api.github.com/repos/AzureAD/identitymodel'
+                        html_url       = 'https://github.com/AzureAD/identitymodel/pull/3533'
+                    }
+                    [PSCustomObject]@{
+                        number         = 157
+                        repository_url = 'https://api.github.com/repos/chris-peterson/pwsh-gitlab'
+                        html_url       = 'https://github.com/chris-peterson/pwsh-gitlab/pull/157'
+                    }
+                )
+            }
+        }
+    }
+
+    It 'Should give each cross-repo result the repository it came from' {
+        $Result = Get-GithubPullRequest -Mine
+
+        $Result[0].RepositoryId | Should -Be 'AzureAD/identitymodel'
+        $Result[1].RepositoryId | Should -Be 'chris-peterson/pwsh-gitlab'
+    }
+
+    It 'Should name a cross-repo result without consulting the working directory' {
+        $null = Get-GithubPullRequest -Search
+
+        Should -Invoke Resolve-GithubRepository -ModuleName PullRequests -Times 0 -Exactly
+    }
+
+    It 'Should keep stamping the one repository a repo-scoped query names' {
+        Mock Invoke-GithubApi -ModuleName PullRequests -MockWith {
+            @([PSCustomObject]@{
+                number         = 1
+                head           = @{ ref = 'feature' }
+                base           = @{ ref = 'main' }
+                repository_url = 'https://api.github.com/repos/other-owner/other-repo'
+            })
+        }
+
+        $Result = Get-GithubPullRequest -RepositoryId 'owner/repo'
+
+        $Result[0].RepositoryId | Should -Be 'cwd-owner/cwd-repo'
     }
 }
 

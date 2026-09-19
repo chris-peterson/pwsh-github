@@ -5,11 +5,12 @@ BeforeAll {
     . $PSScriptRoot/../src/GithubCli/Private/Functions/ObjectHelpers.ps1
     . $PSScriptRoot/../src/GithubCli/Private/Functions/PaginationHelpers.ps1
     . $PSScriptRoot/../src/GithubCli/Private/Functions/GitHelpers.ps1
+    . $PSScriptRoot/../src/GithubCli/Private/Functions/RepositoryHelpers.ps1
     . $PSScriptRoot/../src/GithubCli/Private/Globals.ps1
 
     $global:_SearchTestHelpers = @(
         'ConvertTo-PascalCase', 'ConvertTo-SnakeCase', 'ConvertTo-UrlEncoded',
-        'New-GithubObject', 'Add-CoalescedProperty',
+        'New-GithubObject', 'Add-CoalescedProperty', 'ConvertTo-GithubRepositoryId',
         'Resolve-GithubMaxPages',
         'Resolve-GithubRepository', 'Get-GithubRemoteContext'
     )
@@ -92,6 +93,29 @@ Describe "Search-Github" {
         }
         $Results = Search-Github 'bug' -Scope issues
         $Results[0].PSTypeNames | Should -Contain 'Github.Issue'
+    }
+
+    It "Should give each issue result the repository it came from" {
+        Mock -ModuleName Search Invoke-GithubApi {
+            [PSCustomObject]@{
+                total_count = 2
+                items = @(
+                    [PSCustomObject]@{ number = 42; repository_url = 'https://api.github.com/repos/AzureAD/identitymodel' }
+                    [PSCustomObject]@{ number = 8;  repository_url = 'https://api.github.com/repos/chris-peterson/pwsh-gitlab' }
+                )
+            }
+        }
+
+        $Results = Search-Github 'bug' -Scope issues
+
+        $Results[0].RepositoryId | Should -Be 'AzureAD/identitymodel'
+        $Results[1].RepositoryId | Should -Be 'chris-peterson/pwsh-gitlab'
+    }
+
+    It "Should leave RepositoryId off a result that names no repository" {
+        $Results = Search-Github 'test' -Scope code
+
+        $Results[0].PSObject.Properties.Name | Should -Not -Contain 'RepositoryId'
     }
 }
 

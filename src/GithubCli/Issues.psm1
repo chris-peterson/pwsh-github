@@ -71,6 +71,10 @@ function Get-GithubIssue {
     if ($Direction) { $Query.direction = $Direction }
     if ($Since)     { $Query.since     = $Since }
 
+    # Only ByRepo assigns this; declared so the emit loop below can't resolve a
+    # $Repo from global scope and stamp that on every cross-repo result.
+    $Repo = $null
+
     switch ($PSCmdlet.ParameterSetName) {
         'ByRepo' {
             $Repo = Resolve-GithubRepository $RepositoryId
@@ -93,13 +97,18 @@ function Get-GithubIssue {
         }
     }
 
-    $Issues = $Result |
-        Where-Object { -not $_.pull_request } |
-        New-GithubObject 'Github.Issue'
-    if ($Repo) {
-        $Issues | Add-Member -NotePropertyMembers @{ RepositoryId = $Repo } -PassThru
-    } else {
-        $Issues
+    # The issues endpoints return pull requests alongside issues, each carrying a
+    # pull_request key; only that key tells the two apart.
+    foreach ($Item in ($Result | Where-Object { -not $_.pull_request })) {
+        $Issue = $Item | New-GithubObject 'Github.Issue'
+        # -Mine and -Organization span repositories, so each result names its own
+        # rather than taking the one the caller happens to be standing in.
+        $ItemRepo = $Repo ? $Repo : (ConvertTo-GithubRepositoryId $Item.repository_url)
+        if ($ItemRepo) {
+            $Issue | Add-Member -NotePropertyMembers @{ RepositoryId = $ItemRepo } -PassThru
+        } else {
+            $Issue
+        }
     }
 }
 
