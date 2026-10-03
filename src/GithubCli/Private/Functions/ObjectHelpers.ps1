@@ -1,4 +1,4 @@
-function Add-CoalescedProperty {
+function global:Add-CoalescedProperty {
     param (
         [PSCustomObject]
         [Parameter(Mandatory, ValueFromPipeline)]
@@ -26,7 +26,7 @@ function Add-CoalescedProperty {
     }
 }
 
-function New-GithubObject {
+function global:New-GithubObject {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions', '', Justification = 'Creates PSCustomObject wrappers, not a state-changing operation')]
     [CmdletBinding()]
     param(
@@ -79,6 +79,18 @@ function New-GithubObject {
                     try { $MergedAtValue = [datetime]::Parse($MergedAtValue) } catch { Write-Debug "Failed to parse MergedAt: $MergedAtValue" }
                 }
                 $Wrapper | Add-Member -MemberType NoteProperty -Name 'MergedAt' -Value $MergedAtValue
+            }
+
+            if ($DisplayType -eq 'Github.PullRequest') {
+                # GitHub reports a merged pull request as closed; ForgeCli's contract names merged separately.
+                if ($Wrapper.State -eq 'closed' -and $Wrapper.MergedAt) {
+                    $Wrapper.State = 'merged'
+                }
+                # Id is the number shown in the UI, as on GitLab; the API's global id stays as DatabaseId.
+                if ($null -ne $Wrapper.Number) {
+                    $Wrapper | Add-Member -MemberType NoteProperty -Name 'DatabaseId' -Value $Wrapper.Id -Force
+                    $Wrapper | Add-Member -MemberType NoteProperty -Name 'Id' -Value $Wrapper.Number -Force
+                }
             }
 
             if ($DisplayType) {
