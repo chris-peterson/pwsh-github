@@ -100,6 +100,22 @@
     <Name>Github.PullRequest</Name>
     <Members>
       <ScriptProperty>
+        <Name>Forge</Name>
+        <GetScriptBlock>'github'</GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
+        <Name>Host</Name>
+        <GetScriptBlock>if ($this.Url) { ([uri] $this.Url).Host }</GetScriptBlock>
+      </ScriptProperty>
+      <AliasProperty>
+        <Name>Description</Name>
+        <ReferencedMemberName>Body</ReferencedMemberName>
+      </AliasProperty>
+      <ScriptProperty>
+        <Name>AuthorUsername</Name>
+        <GetScriptBlock>$this.User.Login</GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
         <Name>AuthorName</Name>
         <GetScriptBlock>Resolve-GithubUserName $this.User.Login</GetScriptBlock>
       </ScriptProperty>

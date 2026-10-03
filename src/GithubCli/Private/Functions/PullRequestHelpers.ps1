@@ -5,7 +5,7 @@
 # stale. Weak keys let an entry go when its pull request does.
 $global:GithubPullRequestDetailByInstance = [System.Runtime.CompilerServices.ConditionalWeakTable[psobject, psobject]]::new()
 
-function Resolve-GithubPullRequestDetail {
+function global:Resolve-GithubPullRequestDetail {
     <#
     .SYNOPSIS
     Fetches the pulls-API representation of a pull request that came from search.

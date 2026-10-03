@@ -1,4 +1,4 @@
-function Resolve-GithubMaxPages {
+function global:Resolve-GithubMaxPages {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', '', Justification = 'Resolves the MaxPages parameter value')]
     param (
         [Parameter()]

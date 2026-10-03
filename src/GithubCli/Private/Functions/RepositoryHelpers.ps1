@@ -1,4 +1,4 @@
-function ConvertTo-GithubRepositoryId {
+function global:ConvertTo-GithubRepositoryId {
     <#
     .SYNOPSIS
     Reads owner/name out of an API url an item carries about itself. Parses the

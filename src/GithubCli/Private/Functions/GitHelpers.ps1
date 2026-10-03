@@ -1,4 +1,4 @@
-function Get-GithubRemoteContext {
+function global:Get-GithubRemoteContext {
     [CmdletBinding()]
     [OutputType([PSCustomObject])]
     param (
@@ -74,7 +74,7 @@ function Get-GithubRemoteContext {
     $Context
 }
 
-function Resolve-GithubRepository {
+function global:Resolve-GithubRepository {
     [CmdletBinding()]
     [OutputType([string])]
     param (

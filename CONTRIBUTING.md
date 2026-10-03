@@ -89,6 +89,9 @@ The commit-back uses the built-in `GITHUB_TOKEN`. If `main` becomes a protected 
 
 - Follow [PowerShell Best Practices](https://poshcode.gitbook.io/powershell-practice-and-style/)
 - Use approved verbs for cmdlet names (`Get-Verb` to see the list)
+- Declare private helpers loaded through `ScriptsToProcess` as `function global:<Name>`. `ScriptsToProcess` runs in the
+  importer's session state, so a plain function is invisible to the nested modules when another module (ForgeCli)
+  imports GithubCli. `tests/ScriptsToProcess.Tests.ps1` enforces it.
 - Add tests for new functionality
 - Avoid inline commenting (except when necessary); instead, prefer
   intention-revealing code.  Often a well-named function removes

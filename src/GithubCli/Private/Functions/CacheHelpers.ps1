@@ -1,4 +1,4 @@
-function Get-GithubCachePath {
+function global:Get-GithubCachePath {
     [CmdletBinding()]
     [OutputType([string])]
     param()
@@ -7,7 +7,7 @@ function Get-GithubCachePath {
     Join-Path $CacheDir 'cache.yml'
 }
 
-function Get-GithubCache {
+function global:Get-GithubCache {
     [CmdletBinding()]
     [OutputType([hashtable])]
     param()
@@ -37,7 +37,7 @@ function Get-GithubCache {
     return $global:GithubCache
 }
 
-function Save-GithubCache {
+function global:Save-GithubCache {
     [CmdletBinding()]
     param()
 
@@ -63,7 +63,7 @@ function Save-GithubCache {
     }
 }
 
-function Resolve-GithubUserName {
+function global:Resolve-GithubUserName {
     [CmdletBinding()]
     [OutputType([string])]
     param(
