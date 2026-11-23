@@ -67,6 +67,18 @@
         <Name>ProjectPath</Name>
         <GetScriptBlock>$Match = [regex]::Match([string] $this.HtmlUrl, '://[^/]+/(?&lt;ProjectPath&gt;[^/]+/[^/]+)'); if ($Match.Success) { $Match.Groups['ProjectPath'].Value }</GetScriptBlock>
       </ScriptProperty>
+      <MemberSet>
+        <Name>PSStandardMembers</Name>
+        <Members>
+          <PropertySet>
+            <Name>DefaultKeyPropertySet</Name>
+            <ReferencedProperties>
+              <Name>ProjectPath</Name>
+              <Name>Number</Name>
+            </ReferencedProperties>
+          </PropertySet>
+        </Members>
+      </MemberSet>
     </Members>
   </Type>
   <Type>
@@ -111,6 +123,18 @@
         <Name>ProjectPath</Name>
         <GetScriptBlock>$Match = [regex]::Match([string] $this.HtmlUrl, '://[^/]+/(?&lt;ProjectPath&gt;[^/]+/[^/]+)'); if ($Match.Success) { $Match.Groups['ProjectPath'].Value }</GetScriptBlock>
       </ScriptProperty>
+      <MemberSet>
+        <Name>PSStandardMembers</Name>
+        <Members>
+          <PropertySet>
+            <Name>DefaultKeyPropertySet</Name>
+            <ReferencedProperties>
+              <Name>ProjectPath</Name>
+              <Name>Number</Name>
+            </ReferencedProperties>
+          </PropertySet>
+        </Members>
+      </MemberSet>
       <ScriptProperty>
         <Name>SourceBranch</Name>
         <GetScriptBlock>if ($this.Head) { return $this.Head.Ref }; (Resolve-GithubPullRequestDetail $this).Head.Ref</GetScriptBlock>
@@ -141,6 +165,17 @@
         <Name>LastActivityAt</Name>
         <GetScriptBlock>$this.PushedAt</GetScriptBlock>
       </ScriptProperty>
+      <MemberSet>
+        <Name>PSStandardMembers</Name>
+        <Members>
+          <PropertySet>
+            <Name>DefaultKeyPropertySet</Name>
+            <ReferencedProperties>
+              <Name>FullName</Name>
+            </ReferencedProperties>
+          </PropertySet>
+        </Members>
+      </MemberSet>
     </Members>
   </Type>
   <Type>

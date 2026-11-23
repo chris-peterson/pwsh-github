@@ -13,21 +13,10 @@ BeforeAll {
     function global:Invoke-GithubApi { param($HttpMethod, $Path, [hashtable]$Query, [hashtable]$Body, $MaxPages, $Accept) }
     function global:Resolve-GithubRepository { param($Repository) }
     function global:Resolve-GithubMaxPages { param($MaxPages, [switch]$All) }
-    function global:New-GithubObject {
-        param([Parameter(ValueFromPipeline)]$InputObject, [Parameter(Position=0)][string]$DisplayType)
-        Begin{}
-        Process {
-            foreach ($item in $InputObject) {
-                if ($item -is [hashtable]) { $item = [PSCustomObject]$item }
-                $Wrapper = New-Object PSObject
-                $item.PSObject.Properties | ForEach-Object {
-                    $Wrapper | Add-Member -MemberType NoteProperty -Name $_.Name -Value $_.Value
-                }
-                if ($DisplayType) { $Wrapper.PSTypeNames.Insert(0, $DisplayType) }
-                Write-Output $Wrapper
-            }
-        }
-        End{}
+    # The real wrapper, not a stand-in: the module reads PascalCased properties
+    # (RepositoryUrl) off what it returns.
+    foreach ($fn in 'New-GithubObject', 'ConvertTo-PascalCase', 'Get-GithubDefaultSortProperty', 'Test-GithubSortPreference') {
+        Set-Item "function:global:$fn" (Get-Item "function:$fn").ScriptBlock
     }
 
     Import-Module $PSScriptRoot/../src/GithubCli/PullRequests.psm1 -Force

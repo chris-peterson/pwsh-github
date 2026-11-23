@@ -71,7 +71,6 @@ function Get-GithubRepository {
 
     $Result |
         New-GithubObject 'Github.Repository' |
-        Sort-Object FullName |
         Get-FilteredObject $Select
 }
 

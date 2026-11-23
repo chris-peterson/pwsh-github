@@ -47,6 +47,8 @@ function Search-Github {
     $ObjectType = $TypeMap[$Scope]
 
     $Result = Invoke-GithubApi GET "search/$Scope" $ApiQuery -MaxPages $MaxPages
+    # Wrapped one item at a time on purpose: a search comes back in GitHub's
+    # best-match order, which New-GithubObject's default ordering would discard.
     foreach ($Item in $Result.items) {
         $Object = $Item | New-GithubObject $ObjectType
         # A search spans repositories, so each result names its own rather than
