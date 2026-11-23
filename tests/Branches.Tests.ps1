@@ -9,7 +9,7 @@ BeforeAll {
 
     $global:_BranchTestHelpers = @(
         'ConvertTo-PascalCase', 'ConvertTo-SnakeCase', 'ConvertTo-UrlEncoded',
-        'New-GithubObject', 'Add-CoalescedProperty',
+        'New-GithubObject', 'Add-CoalescedProperty', 'Get-GithubDefaultSortProperty', 'Test-GithubSortPreference',
         'Resolve-GithubMaxPages',
         'Resolve-GithubRepository', 'Get-GithubRemoteContext',
         'Get-FilteredObject'

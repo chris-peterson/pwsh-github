@@ -10,7 +10,7 @@ BeforeAll {
 
     $global:_SearchTestHelpers = @(
         'ConvertTo-PascalCase', 'ConvertTo-SnakeCase', 'ConvertTo-UrlEncoded',
-        'New-GithubObject', 'Add-CoalescedProperty', 'ConvertTo-GithubRepositoryId',
+        'New-GithubObject', 'Add-CoalescedProperty', 'Get-GithubDefaultSortProperty', 'Test-GithubSortPreference', 'ConvertTo-GithubRepositoryId',
         'Resolve-GithubMaxPages',
         'Resolve-GithubRepository', 'Get-GithubRemoteContext'
     )

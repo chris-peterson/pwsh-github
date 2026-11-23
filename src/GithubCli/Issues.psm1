@@ -99,17 +99,20 @@ function Get-GithubIssue {
 
     # The issues endpoints return pull requests alongside issues, each carrying a
     # pull_request key; only that key tells the two apart.
-    foreach ($Item in ($Result | Where-Object { -not $_.pull_request })) {
-        $Issue = $Item | New-GithubObject 'Github.Issue'
-        # -Mine and -Organization span repositories, so each result names its own
-        # rather than taking the one the caller happens to be standing in.
-        $ItemRepo = $Repo ? $Repo : (ConvertTo-GithubRepositoryId $Item.repository_url)
-        if ($ItemRepo) {
-            $Issue | Add-Member -NotePropertyMembers @{ RepositoryId = $ItemRepo } -PassThru
-        } else {
-            $Issue
+    # Wrapped as one set, not per item, so New-GithubObject can order the listing.
+    $Result |
+        Where-Object { -not $_.pull_request } |
+        New-GithubObject 'Github.Issue' |
+        ForEach-Object {
+            # -Mine and -Organization span repositories, so each result names its own
+            # rather than taking the one the caller happens to be standing in.
+            $ItemRepo = $Repo ? $Repo : (ConvertTo-GithubRepositoryId $_.RepositoryUrl)
+            if ($ItemRepo) {
+                $_ | Add-Member -NotePropertyMembers @{ RepositoryId = $ItemRepo } -PassThru
+            } else {
+                $_
+            }
         }
-    }
 }
 
 function New-GithubIssue {

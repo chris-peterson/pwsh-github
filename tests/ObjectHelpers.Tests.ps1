@@ -139,3 +139,93 @@ Describe "Add-CoalescedProperty" {
         }
     }
 }
+
+Describe "New-GithubObject default ordering" {
+    BeforeAll {
+        # Stand-ins for Types.ps1xml, so each rung is exercised on its own.
+        Update-TypeData -TypeName 'Github.SortTest.Keyed' -DefaultKeyPropertySet Name -Force
+        Update-TypeData -TypeName 'Github.SortTest.Activity' -MemberType ScriptProperty -MemberName LastActivityAt -Value { $this.PushedAt } -Force
+
+        function Get-Names { param([Parameter(ValueFromPipeline)] $InputObject) process { $InputObject.Name } }
+    }
+
+    AfterAll {
+        Remove-TypeData -TypeName 'Github.SortTest.Keyed' -ErrorAction SilentlyContinue
+        Remove-TypeData -TypeName 'Github.SortTest.Activity' -ErrorAction SilentlyContinue
+    }
+
+    It "Should order by the key properties the type declares, ahead of any recency property" {
+        $Result = @(
+            [PSCustomObject]@{ id = 1; name = 'b'; updated_at = '2026-01-03T00:00:00Z' }
+            [PSCustomObject]@{ id = 2; name = 'c'; updated_at = '2026-01-01T00:00:00Z' }
+            [PSCustomObject]@{ id = 3; name = 'a'; updated_at = '2026-01-02T00:00:00Z' }
+        ) | New-GithubObject 'Github.SortTest.Keyed'
+        $Result | Get-Names | Should -Be @('a', 'b', 'c')
+    }
+
+    It "Should order by UpdatedAt, most recent first, when the type declares no key properties" {
+        $Result = @(
+            [PSCustomObject]@{ id = 1; name = 'middle'; updated_at = '2026-01-02T00:00:00Z' }
+            [PSCustomObject]@{ id = 2; name = 'oldest'; updated_at = '2026-01-01T00:00:00Z' }
+            [PSCustomObject]@{ id = 3; name = 'newest'; updated_at = '2026-01-03T00:00:00Z' }
+        ) | New-GithubObject 'Github.SortTest.Plain'
+        $Result | Get-Names | Should -Be @('newest', 'middle', 'oldest')
+    }
+
+    It "Should fall back to LastActivityAt, most recent first, when there is no UpdatedAt" {
+        $Result = @(
+            [PSCustomObject]@{ id = 1; name = 'oldest'; pushed_at = '2026-01-01T00:00:00Z' }
+            [PSCustomObject]@{ id = 2; name = 'newest'; pushed_at = '2026-01-03T00:00:00Z' }
+            [PSCustomObject]@{ id = 3; name = 'middle'; pushed_at = '2026-01-02T00:00:00Z' }
+        ) | New-GithubObject 'Github.SortTest.Activity'
+        $Result | Get-Names | Should -Be @('newest', 'middle', 'oldest')
+    }
+
+    It "Should keep the API's order when there are neither key properties nor a recency property" {
+        $Result = @(
+            [PSCustomObject]@{ id = 1; name = 'b' }
+            [PSCustomObject]@{ id = 2; name = 'c' }
+            [PSCustomObject]@{ id = 3; name = 'a' }
+        ) | New-GithubObject 'Github.SortTest.Plain'
+        $Result | Get-Names | Should -Be @('b', 'c', 'a')
+    }
+
+    It "Should sort across items that arrive in separate pipeline calls" {
+        $Result = 'b', 'c', 'a' | ForEach-Object { [PSCustomObject]@{ id = 1; name = $_ } } |
+            New-GithubObject 'Github.SortTest.Keyed'
+        $Result | Get-Names | Should -Be @('a', 'b', 'c')
+    }
+
+    Context "The caller's own ordering" {
+        BeforeAll {
+            function Get-SortTestListing {
+                [CmdletBinding()]
+                param(
+                    [string] $Sort = 'created',
+                    [string] $Direction = 'desc'
+                )
+                @(
+                    [PSCustomObject]@{ id = 1; name = 'b' }
+                    [PSCustomObject]@{ id = 2; name = 'c' }
+                    [PSCustomObject]@{ id = 3; name = 'a' }
+                ) | New-GithubObject 'Github.SortTest.Keyed'
+            }
+        }
+
+        It "Should keep the API's order when the caller bound -Sort" {
+            Get-SortTestListing -Sort 'updated' | Get-Names | Should -Be @('b', 'c', 'a')
+        }
+
+        It "Should keep the API's order when the caller bound -Direction" {
+            Get-SortTestListing -Direction 'asc' | Get-Names | Should -Be @('b', 'c', 'a')
+        }
+
+        It "Should still sort when -Sort and -Direction only carry their defaults" {
+            Get-SortTestListing | Get-Names | Should -Be @('a', 'b', 'c')
+        }
+
+        It "Should still sort when -Sort was bound to an empty value" {
+            Get-SortTestListing -Sort '' | Get-Names | Should -Be @('a', 'b', 'c')
+        }
+    }
+}

@@ -10,7 +10,7 @@ BeforeAll {
 
     $global:_IssueTestHelpers = @(
         'ConvertTo-PascalCase', 'ConvertTo-SnakeCase', 'ConvertTo-UrlEncoded',
-        'New-GithubObject', 'Add-CoalescedProperty',
+        'New-GithubObject', 'Add-CoalescedProperty', 'Get-GithubDefaultSortProperty', 'Test-GithubSortPreference',
         'Resolve-GithubMaxPages',
         'Resolve-GithubRepository', 'Get-GithubRemoteContext',
         'ConvertTo-GithubRepositoryId'
